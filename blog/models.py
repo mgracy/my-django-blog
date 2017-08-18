@@ -18,5 +18,5 @@ class Post(models.Model):
 		self.save()
 
 	def __str__(self):
-		print('__str__ is calling')
+		print('__str__ is calling', self.title)
 		return self.title
