@@ -12,8 +12,11 @@ class Post(models.Model):
 	published_date = models.DateTimeField(blank=True, null=True)
 
 	def publish(self):
+		print(1)
+		print(type(self))
 		self.published_date = timezone.now()
 		self.save()
 
 	def __str__(self):
+		print('__str__ is calling')
 		return self.title
