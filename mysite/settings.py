@@ -25,7 +25,7 @@ SECRET_KEY = '=z&b!x#e!y_jhcm5h3@$fp-^xf4fe+20wrggl12m_juvnmv=q0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', '172.19.0.164', 'gracyma.pythonanywhere.com', '[::1]']
+ALLOWED_HOSTS = ['127.0.0.1', '172.19.0.164', 'mgracy.pythonanywhere.com', '[::1]']
 
 
 # Application definition
