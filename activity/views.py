@@ -4,4 +4,5 @@ from django.utils import timezone
 
 # Create your views here.
 def register_list(request):
-	return HttpResponse('<h1>Hello world</h1>', None, '200')
+	# return HttpResponse('<h1>Hello world</h1>', None, '200')
+	return render(request, 'activity/Register.html', {})
