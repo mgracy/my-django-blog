@@ -25,7 +25,7 @@ SECRET_KEY = '=z&b!x#e!y_jhcm5h3@$fp-^xf4fe+20wrggl12m_juvnmv=q0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'gracyma.pythonanywhere.com']
+ALLOWED_HOSTS = ['127.0.0.1', '172.19.0.164', 'gracyma.pythonanywhere.com', '[::1]']
 
 
 # Application definition
@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog'
+    'blog',
+    'activity'
 ]
 
 MIDDLEWARE = [
