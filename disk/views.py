@@ -13,11 +13,11 @@ def upload(request):
 	if request.method == "POST":
 		myFile = request.FILES.get('upfile')
 		if not myFile:
-			return HttpResponse('没有上传文件')
+			return HttpResponse('no file is uploaded')
 
 		file = myFile.read()
 		if not file:
-			return HttpResponse('上传文件不存在')
+			return HttpResponse('The file is not exists')
 
 		md5 = hashlib.md5(file).hexdigest()
 		filename = myFile.name
@@ -46,7 +46,7 @@ def upload(request):
 def download_list(request, md5):
 	fileInfo = FileInfo.objects.filter(md5=md5)
 	if not fileInfo:
-		return HttpResponse('文件不存在或已被删除')
+		return HttpResponse('The file is not exists or has been deleted.')
 
 	# context = {
 	# 	'name': fileInfo[0].name,
