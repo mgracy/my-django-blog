@@ -34,9 +34,10 @@ def upload(request):
 					fn.write(file)
 					print('try: files/disk')
 			except Exception as e:
+				print('except-before: /files/disk')
 				with open('/files/disk/{}'.format(md5), 'wb') as fn:
 					fn.write(file)
-					print('except: /files/disk')
+					print('except-after: /files/disk')
 			else:
 				print('no exception: 666')
 				pass
