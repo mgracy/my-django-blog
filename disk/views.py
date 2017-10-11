@@ -37,6 +37,7 @@ def upload(request):
 			except Exception as e:
 				THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
 				my_file = os.path.join(THIS_FOLDER, '/files/disk/{}'.format(md5))
+				print('my_file:{}'.format(my_file))
 				print('except-before: /files/disk')
 				with open(my_file, 'wb') as fn:
 					fn.write(file)
