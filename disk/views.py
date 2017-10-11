@@ -26,7 +26,8 @@ def upload(request):
 		fileInfo = FileInfo.objects.filter(md5=md5)
 
 		print(fileInfo)
-
+		THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+		print('THIS_FOLDER: {}'.format(THIS_FOLDER))
 		if not fileInfo:
 			print(md5)
 			print(1111)
@@ -35,7 +36,7 @@ def upload(request):
 					fn.write(file)
 					print('try: files/disk')
 			except Exception as e:
-				THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+				
 				my_file = os.path.join(THIS_FOLDER, '/files/disk/{}'.format(md5))
 				print('my_file:{}'.format(my_file))
 				print('except-before: /files/disk')
