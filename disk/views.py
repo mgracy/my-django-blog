@@ -29,8 +29,20 @@ def upload(request):
 		if not fileInfo:
 			print(md5)
 			print(1111)
-			with open('files/disk/{}'.format(md5), 'wb') as fn:
-				fn.write(file)
+			try:
+				with open('files/disk/{}'.format(md5), 'wb') as fn:
+					fn.write(file)
+					print('try: files/disk')
+			except Exception as e:
+				with open('/files/disk/{}'.format(md5), 'wb') as fn:
+					fn.write(file)
+					print('except: /files/disk')
+			else:
+				print('no exception: 666')
+				pass
+			finally:
+				print('finally: 886')
+				pass
 
 		print(2222)
 		files = {
