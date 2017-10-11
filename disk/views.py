@@ -24,10 +24,15 @@ def upload(request):
 		filesize = myFile.size
 		fileInfo = FileInfo.objects.filter(md5=md5)
 
+		print(fileInfo)
+
 		if not fileInfo:
+			print(md5)
+			print(1111)
 			with open('files/disk/{}'.format(md5), 'wb') as fn:
 				fn.write(file)
 
+		print(2222)
 		files = {
 			'name': myFile.name,
 			'size': myFile.size,
