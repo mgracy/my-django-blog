@@ -57,7 +57,7 @@ def upload(request):
 			'size': myFile.size,
 			'downloads': 0,
 			'created_date': timezone.now(),
-			'url':'/disk/files/disk/{}'.format(myFile.name)
+			'url':'/disk/files/{}'.format(myFile.name)
 		}
 
 		FileInfo(name=filename,size=filesize,md5=md5).save()
@@ -84,7 +84,7 @@ def download_list(request, md5):
 		'size': fileInfo[0].size,
 		'downloads': fileInfo[0].downloads,
 		'created_date': fileInfo[0].created_date,
-		'url':'/disk/files/disk/{}'.format(fileInfo[0].name)
+		'url':'/disk/files/{}'.format(fileInfo[0].name)
 	}
 
 	# FileInfo(name=filename,size=filesize,md5=md5).save()
@@ -103,7 +103,7 @@ def download_detail(request):
 	if not fileinfo:
 		return render(request, 'disk/error_404.html')
 
-	file = open('files/disk/{}'.format(md5), 'rb').read()
+	file = open('files/{}'.format(md5), 'rb').read()
 	response=HttpResponse(file)
 	response['Content-type'] = 'application/octet-stream'
 	return response
