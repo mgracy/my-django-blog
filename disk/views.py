@@ -103,7 +103,18 @@ def download_detail(request):
 	if not fileinfo:
 		return render(request, 'disk/error_404.html')
 
-	file = open('files/{}'.format(md5), 'rb').read()
+	file = None
+	try:
+		file = open('files/{}'.format(md5), 'rb').read()
+	except Exception as e:
+		THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+		my_file = os.path.join(THIS_FOLDER, 'files/{}'.format(md5))
+		file = open(my_file, 'rb').read()		
+	else:
+		pass
+	finally:
+		pass
+
 	response=HttpResponse(file)
 	response['Content-type'] = 'application/octet-stream'
 	return response
