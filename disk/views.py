@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 import hashlib
 from disk.models import FileInfo
 from django.utils import timezone
+import os
 
 # Create your views here.
 
@@ -34,8 +35,10 @@ def upload(request):
 					fn.write(file)
 					print('try: files/disk')
 			except Exception as e:
+				THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+				my_file = os.path.join(THIS_FOLDER, '/files/disk/{}'.format(md5))
 				print('except-before: /files/disk')
-				with open('/files/disk/{}'.format(md5), 'wb') as fn:
+				with open(my_file, 'wb') as fn:
 					fn.write(file)
 					print('except-after: /files/disk')
 			else:
