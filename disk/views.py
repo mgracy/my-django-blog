@@ -32,12 +32,13 @@ def upload(request):
 			print(md5)
 			print(1111)
 			try:
-				with open('files/disk/{}'.format(md5), 'wb') as fn:
+				with open('disk/files/{}'.format(md5), 'wb') as fn:
+				# with open('files/disk/{}'.format(md5), 'wb') as fn:
 					fn.write(file)
 					print('try: files/disk')
 			except Exception as e:
 				
-				my_file = os.path.join(THIS_FOLDER, '/files/disk/{}'.format(md5))
+				my_file = os.path.join(THIS_FOLDER, '/files/{}'.format(md5))
 				print('my_file:{}'.format(my_file))
 				print('except-before: /files/disk')
 				with open(my_file, 'wb') as fn:
