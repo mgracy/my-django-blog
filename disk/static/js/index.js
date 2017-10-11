@@ -156,37 +156,37 @@ $(window).resize(function() {
 
 
 
-/* ------------------------------------------------------------------ */
-/*    BackGround
-/* ------------------------------------------------------------------ */
-$('body').vegas({
-    overlay: '/static/img/overlay.png',
-    slides: [
-        // { src: 'img/banner8.jpg' },
-        // { src: 'img/banner7.jpg' },
-        // { src: 'img/banner6.jpg' },
-        // { src: 'img/banner5.jpg' },
-        // { src: 'img/banner4.jpg' },
-        { src: '/static/img/bannerq3.jpg' },
-        { src: '/static/img/bannerq2.jpg' },
-        { src: '/static/img/bannerq1.jpg' },
-    ],
-})
+// /* ------------------------------------------------------------------ */
+// /*    BackGround
+// /* ------------------------------------------------------------------ */
+// $('body').vegas({
+//     overlay: '/static/img/overlay.png',
+//     slides: [
+//         // { src: 'img/banner8.jpg' },
+//         // { src: 'img/banner7.jpg' },
+//         // { src: 'img/banner6.jpg' },
+//         // { src: 'img/banner5.jpg' },
+//         // { src: 'img/banner4.jpg' },
+//         { src: '/static/img/bannerq3.jpg' },
+//         { src: '/static/img/bannerq2.jpg' },
+//         { src: '/static/img/bannerq1.jpg' },
+//     ],
+// })
 
 
 
 /* ------------------------------------------------------------------ */
 /*    Page-Loader
 /* ------------------------------------------------------------------ */
-// Wait for window load
-$(window).load(function() {
-// Animate loader off screen
-    $(".page-loader").fadeOut( "slow" );
+// // Wait for window load
+// $(window).load(function() {
+// // Animate loader off screen
+//     $(".page-loader").fadeOut( "slow" );
     
-    new WOW().init();
+//     new WOW().init();
 
-    new Clipboard($('button')[0]);
-});
+//     new Clipboard($('button')[0]);
+// });
 
 
 
@@ -257,39 +257,36 @@ $('.search-text-icon').click(function() {
         /*     search-submit
         /* ------------------------------ */
 	var op = {
-	    "method" : "get",
-	    "url" : "/search/",
+    	    "method" : "get",
+    	    "url" : "/disk/search/",
             "data": "kw=" + $("#files-info").val(),
-	    "success" : function(data) {
+    	    "success" : function(data) {
                 console.log(data);
-		addSearchFile(data);
+        		addSearchFile(data);
             },
-	    "error" : function(error) {
-	    	console.log(error);
-	    }
-	    
+    	    "error" : function(error) {
+    	    	console.log(error);
+    	    }
         };
 
 	function addSearchFile(data) {
-	    data = eval(data);
+	    data = eval('('+data+')');
 	    $('.file-content').remove();
 	    for(var i=0; i<data.length; i++) {
-		
-
-		var html = 
-		'<div class="file-content">' +
-                    '<div class="file-name" style="width:25%;">'+data[i].filename+'</div>' +
-                    '<div class="file-size" style="width:10%;">'+data[i].size+'</div>' +
-                    '<div class="file-date" style="width:10%;">'+data[i].download+'</div>' +
-                    '<div class="file-date" style="width:20%;">'+data[i].time+'</div>' +
-                    '<div class="file-link" style="width:35%; padding-right: 80px; text-overflow: ellipsis; overflow: hidden;">' +
-                        '<span>' +
-                            'https://pan.tanzhouvip.com/s/'+data[i].key+
-                        '</span>' +
-                    '</div>' +
-                    '<button><a href="/s/'+data[i].key+'">Download</a></button>' +
-                '</div>'
-		$('.show-file').append( html ).show();
+    		var html = 
+    		'<div class="file-content">' +
+                '<div class="file-name" style="width:24%;margin-left:1%">'+data[i].name+'</div>' +
+                '<div class="file-size" style="width:10%;">'+data[i].size+'</div>' +
+                '<div class="file-date" style="width:10%;">'+data[i].downloads+'</div>' +
+                '<div class="file-date" style="width:20%;">'+data[i].created_date+'</div>' +
+                '<div class="file-link" style="width:35%; padding-right: 80px; text-overflow: ellipsis; overflow: hidden;">' +
+                    '<span>' +
+                        'https://pan.tanzhouvip.com/s/'+data[i].size+
+                    '</span>' +
+                '</div>' +
+                '<button><a href="/s/'+data[i].size+'">Download</a></button>' +
+            '</div>'
+    		$('.show-file').append( html ).show();
 	    }
 	}
 	
@@ -298,19 +295,19 @@ $('.search-text-icon').click(function() {
     };
 })
 
-/* ------------------------------------------------------------------ */
-/*    qqad
-/* ------------------------------------------------------------------ */
-$('.adbtn').each(function(i){
-    $(this).click(function(){
-	if(i==0){
-        window.location.href="tencent://message/?uin=2463597788&Site=可里老师&Menu=no"
-     }
-        if(i==1){
-	window.location.href="tencent://message/?uin=1463590088&Site=可里老师&Menu=no"
-	}
-	if(i==2){
-	window.location.href="tencent://message/?uin=1263591188&Site=可里老师&Menu=no"
-	}
-    })
-})
+// /* ------------------------------------------------------------------ */
+// /*    qqad
+// /* ------------------------------------------------------------------ */
+// $('.adbtn').each(function(i){
+//     $(this).click(function(){
+// 	if(i==0){
+//         window.location.href="tencent://message/?uin=2463597788&Site=可里老师&Menu=no"
+//      }
+//         if(i==1){
+// 	window.location.href="tencent://message/?uin=1463590088&Site=可里老师&Menu=no"
+// 	}
+// 	if(i==2){
+// 	window.location.href="tencent://message/?uin=1263591188&Site=可里老师&Menu=no"
+// 	}
+//     })
+// })

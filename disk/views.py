@@ -4,6 +4,7 @@ import hashlib
 from disk.models import FileInfo
 from django.utils import timezone
 import os
+import json
 
 # Create your views here.
 
@@ -24,6 +25,8 @@ def upload(request):
 		filename = myFile.name
 		filesize = myFile.size
 		fileInfo = FileInfo.objects.filter(md5=md5)
+		user_ip = get_client_ip(request)
+		now = timezone.localtime(timezone.now())
 
 		if not fileInfo:
 			try:
@@ -39,21 +42,11 @@ def upload(request):
 					print('except-after: /files/disk')
 			else:
 				print('no exception: 666')
-				pass
 			finally:
 				print('finally: 886')
-				pass
 
-		files = {
-			'name': myFile.name,
-			'size': myFile.size,
-			'downloads': 0,
-			'created_date': timezone.now(),
-			'url':'/disk/files/{}'.format(myFile.name)
-		}
-
-		FileInfo(name=filename,size=filesize,md5=md5).save()
-		# return render(request, 'disk/uploadfiles.html', {'files': files})
+		print('now is {}'.format(now))
+		FileInfo(name=filename,size=filesize,md5=md5,created_date= now, user_ip=user_ip).save()
 		return HttpResponseRedirect('/disk/s/{}'.format(md5))
 	else:
 		return HttpResponse('GET')
@@ -62,26 +55,17 @@ def upload(request):
 def download_list(request, md5):
 	fileInfo = FileInfo.objects.filter(md5=md5)
 	if not fileInfo:
-		return HttpResponse('The file is not exists or has been deleted.')
-
-	# context = {
-	# 	'name': fileInfo[0].name,
-	# 	'size': fileInfo[0].size,
-	# 	'url':'/disk/files/disk/{}'.format(fileInfo[0].name)
-	# }
-	# return render(request, 'disk/downloadfiles.html', context=context)
+		return render(request, 'disk/error_404.html')
 
 	files = {
 		'name': fileInfo[0].name,
 		'size': fileInfo[0].size,
 		'downloads': fileInfo[0].downloads,
-		'created_date': fileInfo[0].created_date,
+		'created_date': fileInfo[0].created_date.strftime('%Y-%m-%d %H:%M:%S'),
 		'url':'/disk/files/{}'.format(fileInfo[0].name)
 	}
 
-	# FileInfo(name=filename,size=filesize,md5=md5).save()
-	# return render(request, 'disk/uploadfiles.html', {'files': files})
-	# return HttpResponseRedirect('/disk/s/{}'.format(md5))
+	print(files)
 	return render(request, 'disk/uploadfiles.html', {'files': files})
 
 def download_detail(request):
@@ -111,3 +95,35 @@ def download_detail(request):
 	response=HttpResponse(file)
 	response['Content-type'] = 'application/octet-stream'
 	return response
+
+def search(request):
+	ip = get_client_ip(request)
+	name = request.GET.get('kw', '')
+	fileInfo = FileInfo.objects.filter(name__contains=name)
+	if not fileInfo:
+		return HttpResponse('[]')
+
+	fileinfoLen = len(fileInfo)
+	fileinfoList = []
+
+	for x in range(0,fileinfoLen):
+		files = {
+			"ip": fileInfo[0].user_ip,
+			"name":fileInfo[0].name,
+			"size":fileInfo[0].size,
+			"downloads":fileInfo[0].downloads,
+			"created_date": fileInfo[0].created_date.strftime('%Y-%m-%d %H:%M:%S'),
+			"url":"/disk/files/{}".format(fileInfo[0].name)
+		}
+		fileinfoList.append(files)
+
+	return HttpResponse(str(fileinfoList))
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
