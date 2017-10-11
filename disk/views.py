@@ -25,21 +25,14 @@ def upload(request):
 		filesize = myFile.size
 		fileInfo = FileInfo.objects.filter(md5=md5)
 
-		print(fileInfo)
-
 		if not fileInfo:
-			print(md5)
-			print(1111)
 			try:
 				with open('disk/files/{}'.format(md5), 'wb') as fn:
-				# with open('files/disk/{}'.format(md5), 'wb') as fn:
 					fn.write(file)
 					print('try: files/disk')
 			except Exception as e:
 				THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
-				print('THIS_FOLDER: {}'.format(THIS_FOLDER))
 				my_file = os.path.join(THIS_FOLDER, 'files/{}'.format(md5))
-				print('my_file:{}'.format(my_file))
 				print('except-before: /files/disk')
 				with open(my_file, 'wb') as fn:
 					fn.write(file)
@@ -51,7 +44,6 @@ def upload(request):
 				print('finally: 886')
 				pass
 
-		print(2222)
 		files = {
 			'name': myFile.name,
 			'size': myFile.size,
@@ -98,7 +90,6 @@ def download_detail(request):
 		return render(request, 'disk/error_404.html')
 
 	md5 = referer[-32:]
-	print('md5: {}'.format(md5))
 	fileinfo = FileInfo.objects.filter(md5=md5)
 	if not fileinfo:
 		return render(request, 'disk/error_404.html')
@@ -115,6 +106,8 @@ def download_detail(request):
 	finally:
 		pass
 
+	fileinfo[0].downloads = fileinfo[0].downloads + 1
+	fileinfo[0].save()
 	response=HttpResponse(file)
 	response['Content-type'] = 'application/octet-stream'
 	return response
