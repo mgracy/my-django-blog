@@ -1,0 +1,27 @@
+{% extends 'activity/base.html' %}
+    
+{% block content %}
+    <h3>Report</h3>
+    <table class="table table-striped table-responsive">
+        <th>No.</th>
+        <th>name</th>
+        <th>company name</th>
+        <th>title</th>
+        <th>mobile no</th>
+        <th>email address</th>
+        <th>create date</th>
+        {% for registerList in registerLists%}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ registerList.name }}</td>
+                <td>{{ registerList.company_name }}</td>
+                <td>{{ registerList.title }}</td>
+                <td>{{ registerList.mobile_no }}</td>
+                <td>{{ registerList.email_address }}</td>
+                <td>{{ registerList.created_date|date:'Y-m-d H:i:s'}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+    {% include 'activity/page.html' %}
+{% endblock %}

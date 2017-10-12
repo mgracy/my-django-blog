@@ -1,9 +1,20 @@
+{% load staticfiles %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-	<title></title>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />  
+    <title>Activity</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <script type="text/javascript" src="{% static 'js/jquery-1.10.0.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
 </head>
+
 <body>
-	<h1>Hello xxxxxxxxxxxxxxx</h1>
+    <div class="container-fluid">
+		{% block content %}
+		{% endblock %}
+    </div>
 </body>
 </html>
