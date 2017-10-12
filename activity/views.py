@@ -20,7 +20,7 @@ def submit(request):
 
 		Register(name=name, company_name=companyName, title=jobTitle, mobile_no=mobileNo, email_address=emailAddress, created_date=timezone.localtime(timezone.now())).save()
 
-		return HttpResponse("您已提交表单~~")
+		return HttpResponse("Thank you for submiting the form.")
 	else:
 		return HttpResponse("Get")
 	
