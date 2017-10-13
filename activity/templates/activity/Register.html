@@ -16,7 +16,7 @@
     		color: red;
     	}
 		#myCanvas{
-			background-image: url({% static 'images/banner.png' %});
+			background-image: url({% static 'images/banner.jpg' %});
 			width: 100%;
 			background-size: 100%;
 		}
@@ -33,20 +33,24 @@
             <br>
             <div>
                 <div class="form-group">
-                    <span>举办方:</span>
+                    <span>举办方：</span>
                     <span>GTI Shanghai</span>
                 </div>
                 <div class="form-group">
-                    <span>地点：</span>
-                    <span>上海Office</span>
+                    <span>举办地点：</span>
+                    <span>杨浦区伟成路70号瑞力创新中心1001室</span>
                 </div>
                 <div class="form-group">
-                    <span>联系电话：</span>
-                    <span>021-63758370</span>
+                    <span>咨询电话：</span>
+                    <span>021-63758369，李小姐</span>
                 </div>
-                <div class="form-group">
-                    <span>邮件联系：</span>
-                    <a href="mailto:#">sherry.ma@gti.com.hk</a>
+                <div class="form-group text-center">
+                    <br/>
+                    <span>
+                        <strong>更多精彩活动 关注微信公众号</strong>
+                        <br>
+                        <strong>【广州科宸电脑工程上海分公司】</strong>
+                    </span> 
                 </div>
             </div>
             <hr>
@@ -78,25 +82,28 @@
                 </div>
             </div>
             <div class="activity">
-                <h3>参加线下活动选择（选1-3项）</h3>
-    			<div class="checkbox">
-    			  <label>
-    			    <input type="checkbox" value="">
-    			    11月9日下午
-    			  </label>
-    			</div>
-    			<div class="checkbox">
-    			  <label>
-    			    <input type="checkbox" value="">
-    			    11月10日上午
-    			  </label>
-    			</div>
-    			<div class="checkbox">
-    			  <label>
-    			    <input type="checkbox" value="">
-    			    11月10日下午
-    			  </label>
-    			</div>			
+                <label>参加活动场次（选1-3项）<span class="required_asterisk">*</span></label>
+                <div class="form-inline">
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="cb1" value="11月9日14:00-17:00">
+                        11月9日14:00-17:00 &nbsp;&nbsp;
+                      </label>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="cb2" value="11月10日9:30-12:30">
+                        11月10日9:30-12:30 &nbsp;&nbsp;
+                      </label>
+                    </div>
+                    <div class="checkbox">
+                      <label>
+                        <input type="checkbox" name="cb3" value="11月10日14:00-17:00">
+                        11月10日14:00-17:00
+                      </label>
+                    </div> 
+                </div>
+                <p></p>
             </div>
             <hr>
             <div class="row">
@@ -184,6 +191,28 @@
                 }
             });
 
+            $("input:checkbox").change(function() {
+                if ($(this).is(":checked")) {
+                    $(".activity").find('p').text('');
+                    if ($("div").find(".has-error").length <= 0) {
+                        $("#btnSubmit").prop("disabled", false);
+                    }
+                }else{
+                    var cbxFlag = false;
+                    $("input:checkbox").each(function(i, item){
+                        if($(item).is(":checked")){
+                            cbxFlag = true;
+                        }
+                    })
+
+                    if(!cbxFlag){
+                        var labelText = $(".activity").find("label:first").text().replace('*','');
+                        $(".activity").find('p').text('请填写'+labelText);
+                        $("#btnSubmit").prop("disabled", true);
+                    }
+                } 
+            });
+
             $("#btnSubmit").click(function () {
                 var requiredFlag = false;
                 $(".required").each(function (i, item) {
@@ -196,9 +225,23 @@
                         $(item).parent().removeClass("has-error");
                     }
                 });
+
+                var cbxFlag = false;
+                $("input:checkbox").each(function(i, item){
+                    if($(item).is(":checked")){
+                        cbxFlag = true;
+                    }
+                })
   				
+                if(!cbxFlag){
+                    var labelText = $(".activity").find("label:first").text().replace('*','');
+                    $(".activity").find('p').text('请填写'+labelText);
+                    $("#btnSubmit").prop("disabled", true);
+                    return false;
+                }
+
   				if(requiredFlag)
-  					return;
+  					return false;
             });
 
             function getCookie(c_name)

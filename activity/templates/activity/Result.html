@@ -9,6 +9,7 @@
         <th>title</th>
         <th>mobile no</th>
         <th>email address</th>
+        <th>activities</th>
         <th>create date</th>
         {% for registerList in registerLists%}
             <tr>
@@ -18,6 +19,7 @@
                 <td>{{ registerList.title }}</td>
                 <td>{{ registerList.mobile_no }}</td>
                 <td>{{ registerList.email_address }}</td>
+                <td>{{ registerList.activities_choice}}</td>
                 <td>{{ registerList.created_date|date:'Y-m-d H:i:s'}}</td>
             </tr>
         {% endfor %}

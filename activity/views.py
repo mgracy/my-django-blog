@@ -2,6 +2,7 @@ from django.shortcuts import render, HttpResponse
 from .models import Register
 from django.utils import timezone
 import math
+from .send_mail import sendEmail
 
 # Create your views here.
 def register_list(request):
@@ -9,6 +10,7 @@ def register_list(request):
 
 def submit(request):
 	if request.method =="POST":
+		print('...begin...')
 		referer = request.META.get('HTTP_REFERER')	
 		postBody = request.POST
 		myDict = postBody.dict()
@@ -18,10 +20,22 @@ def submit(request):
 		mobileNo = myDict['mobileNo']
 		emailAddress = myDict['emailAddress']
 		print(name, companyName, jobTitle, mobileNo, emailAddress)
+		activityChoice = ''
+		if 'cb1' in myDict:
+			activityChoice += myDict['cb1'] + ','
+		if 'cb2' in myDict:
+			activityChoice += myDict['cb2'] + ','
+		if 'cb3' in myDict:
+			activityChoice += myDict['cb3'] + ','
 
-		Register(name=name, company_name=companyName, title=jobTitle, mobile_no=mobileNo, email_address=emailAddress, created_date=timezone.localtime(timezone.now())).save()
+		activityChoice = activityChoice.rstrip(',')
 
-		return HttpResponse("Thank you for submiting the form.")
+		Register(name=name, company_name=companyName, title=jobTitle, mobile_no=mobileNo, email_address=emailAddress, created_date=timezone.localtime(timezone.now()),activities_choice=activityChoice).save()
+		print('...end...')
+		msg = "Dear {}, thank you for submiting the form.".format(name)
+		sendEmail('36040944@qq.com', emailAddress, None,'This is the default mail subject', msg)
+		print('...sendEmail end...')
+		return HttpResponse(msg)
 	else:
 		return HttpResponse("Get")
 	
