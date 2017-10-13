@@ -37,7 +37,7 @@ def sendEmail(fromStr, toStr, ccStr, mailSubject, mailBody):
 	msg['To'] = toStr
 
 	server = smtplib.SMTP_SSL("smtp.qq.com", 465) #实例化smtp服务器
-	server.login(fromStr, "hnsgjollolpdbidd")
+	server.login(fromStr, "hnsgjollolpdbibb")
 	to_list = toStr.replace("\n", "").split(',')
 	print(server.sendmail(fromStr, to_list, msg.as_string()))
 	print('send mail over')
