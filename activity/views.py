@@ -3,10 +3,13 @@ from .models import Register
 from django.utils import timezone
 import math
 from .send_mail import sendEmail
+import activity.activitiesConfig
 
 # Create your views here.
 def register_list(request):
-	return render(request, 'activity/Register.html', {})
+	activities = activity.activitiesConfig.activities
+	lenAct = len(activities)
+	return render(request, 'activity/Register.html', {'activities':activities, 'lenAct':lenAct})
 
 def submit(request):
 	if request.method =="POST":
@@ -20,16 +23,17 @@ def submit(request):
 		mobileNo = myDict['mobileNo']
 		emailAddress = myDict['emailAddress']
 		print(name, companyName, jobTitle, mobileNo, emailAddress)
+		print(myDict)
 		activityChoice = ''
-		if 'cb1' in myDict:
-			activityChoice += myDict['cb1'] + ','
-		if 'cb2' in myDict:
-			activityChoice += myDict['cb2'] + ','
-		if 'cb3' in myDict:
-			activityChoice += myDict['cb3'] + ','
+		for k,v in activity.activitiesConfig.activities:
+			if k in myDict:
+				activityChoice += myDict[k] + ','
 
+		print(activityChoice)
+		print('----------************--------')
 		activityChoice = activityChoice.rstrip(',')
-
+		print(activityChoice)
+		print('--------************----------')
 		Register(name=name, company_name=companyName, title=jobTitle, mobile_no=mobileNo, email_address=emailAddress, created_date=timezone.localtime(timezone.now()),activities_choice=activityChoice).save()
 		print('...end...')
 		signiture = "=================================================================\nGracy.Ma\nEmail: gx.ma@gti.com.hk\nMobile:18820036334"
