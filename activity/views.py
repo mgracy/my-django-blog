@@ -36,12 +36,14 @@ def submit(request):
 		print('--------************----------')
 		Register(name=name, company_name=companyName, title=jobTitle, mobile_no=mobileNo, email_address=emailAddress, created_date=timezone.localtime(timezone.now()),activities_choice=activityChoice).save()
 		print('...end...')
-		signiture = "=================================================================\nGracy.Ma\nEmail: gx.ma@gti.com.hk\nMobile:18820036334"
+		signiture = "=================================================================\nGracy.Ma\nEmail：gx.ma@gti.com.hk\nMobile：18820036334"
 		msg = "Dear {}, \nThank you for your interest in our activity. We have prepared your some amazing speech.\nBest regards,\n\n\n{}".format(name, signiture)
 		try:
 			sendEmail('36040944@qq.com', emailAddress, None,'This is the default mail subject', msg)
 		except Exception as e:
-			print('...sendEmail except...')
+			print('*************error**************')
+			print(e)
+			print('*************error**************')
 			msg = "Dear {}, \nthank you for submiting the form.".format(name)
 			return HttpResponse(msg)
 		
