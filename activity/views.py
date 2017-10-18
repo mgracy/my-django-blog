@@ -2,7 +2,7 @@ from django.shortcuts import render, HttpResponse
 from .models import Register
 from django.utils import timezone
 import math
-from .send_mail import sendEmail
+from .send_mail import SendEmail
 import activity.activitiesConfig
 
 # Create your views here.
@@ -29,22 +29,23 @@ def submit(request):
 			if k in myDict:
 				activityChoice += myDict[k] + ','
 
-		print(activityChoice)
-		print('----------************--------')
 		activityChoice = activityChoice.rstrip(',')
-		print(activityChoice)
-		print('--------************----------')
 		Register(name=name, company_name=companyName, title=jobTitle, mobile_no=mobileNo, email_address=emailAddress, created_date=timezone.localtime(timezone.now()),activities_choice=activityChoice).save()
 		print('...end...')
-		signiture = "=================================================================\nGracy.Ma\nEmail：gx.ma@gti.com.hk\nMobile：18820036334"
-		msg = "Dear {}, \nThank you for your interest in our activity. We have prepared your some amazing speech.\nBest regards,\n\n\n{}".format(name, signiture)
+		mailFrom = activity.activitiesConfig.mailFrom
+		mailSubject = activity.activitiesConfig.mailSubject
+		mailBodyDear = activity.activitiesConfig.mailBodyDear
+		mailBodyEmbedImage = activity.activitiesConfig.mailBodyEmbedImage
+		mailBodyEmbedImagePath = activity.activitiesConfig.mailBodyEmbedImagePath
+		mailBodySignuture = activity.activitiesConfig.mailBodySignuture
+		msg = '{}{}{}'.format(mailBodyDear, mailBodyEmbedImage, mailBodySignuture)
+
 		try:
-			sendEmail('36040944@qq.com', emailAddress, None,'This is the default mail subject', msg)
+			SendEmail(mailFrom, emailAddress, None, mailSubject, msg, mailBodyEmbedImagePath)
 		except Exception as e:
 			print('*************error**************')
 			print(e)
 			print('*************error**************')
-			msg = "Dear {}, \nthank you for submiting the form.".format(name)
 			return HttpResponse(msg)
 		
 		print('...sendEmail end...')
