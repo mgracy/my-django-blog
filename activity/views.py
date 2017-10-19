@@ -17,13 +17,11 @@ def submit(request):
 		referer = request.META.get('HTTP_REFERER')	
 		postBody = request.POST
 		myDict = postBody.dict()
-		name = myDict['name']
-		companyName = myDict['companyName']
-		jobTitle = myDict['jobTitle']
+		name = myDict[u'name']
+		companyName = myDict[u'companyName']
+		jobTitle = myDict[u'jobTitle']
 		mobileNo = myDict['mobileNo']
 		emailAddress = myDict['emailAddress']
-		print(name, companyName, jobTitle, mobileNo, emailAddress)
-		print(myDict)
 		activityChoice = ''
 		for k,v in activity.activitiesConfig.activities:
 			if k in myDict:
