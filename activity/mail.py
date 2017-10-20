@@ -1,17 +1,16 @@
 #coding:utf-8
 import smtplib
 
-
 import os
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
-import activity.activitiesConfig
+import activity.config
 
-smtpServer = activity.activitiesConfig.smtpServer
-smtpPort = activity.activitiesConfig.smtpPort
-smtpAccount = activity.activitiesConfig.smtpAccount
-smtpKey = activity.activitiesConfig.smtpKey
+smtpServer = activity.config.smtpServer
+smtpPort = activity.config.smtpPort
+smtpAccount = activity.config.smtpAccount
+smtpKey = activity.config.smtpKey
 
 def sendEmail(fromStr, toStr, ccStr, mailSubject, mailBody):
 	msg = MIMEText(mailBody)

@@ -2,12 +2,13 @@ from django.shortcuts import render, HttpResponse
 from .models import Register
 from django.utils import timezone
 import math
-from .send_mail import SendEmail
-import activity.activitiesConfig
+from .mail import SendEmail
+from .sms import make_request
+import activity.config
 
 # Create your views here.
 def register_list(request):
-	activities = activity.activitiesConfig.activities
+	activities = activity.config.activities
 	lenAct = len(activities)
 	return render(request, 'activity/Register.html', {'activities':activities, 'lenAct':lenAct})
 
@@ -23,19 +24,21 @@ def submit(request):
 		mobileNo = myDict['mobileNo']
 		emailAddress = myDict['emailAddress']
 		activityChoice = ''
-		for k,v in activity.activitiesConfig.activities:
+		for k,v in activity.config.activities:
 			if k in myDict:
 				activityChoice += myDict[k] + ','
 
 		activityChoice = activityChoice.rstrip(',')
 		Register(name=name, company_name=companyName, title=jobTitle, mobile_no=mobileNo, email_address=emailAddress, created_date=timezone.localtime(timezone.now()),activities_choice=activityChoice).save()
 		print('...end...')
-		mailFrom = activity.activitiesConfig.mailFrom
-		mailSubject = activity.activitiesConfig.mailSubject
-		mailBodyDear = activity.activitiesConfig.mailBodyDear
-		mailBodyEmbedImage = activity.activitiesConfig.mailBodyEmbedImage
-		mailBodyEmbedImagePath = activity.activitiesConfig.mailBodyEmbedImagePath
-		mailBodySignuture = activity.activitiesConfig.mailBodySignuture
+
+		# sendMail
+		mailFrom = activity.config.mailFrom
+		mailSubject = activity.config.mailSubject
+		mailBodyDear = activity.config.mailBodyDear
+		mailBodyEmbedImage = activity.config.mailBodyEmbedImage
+		mailBodyEmbedImagePath = activity.config.mailBodyEmbedImagePath
+		mailBodySignuture = activity.config.mailBodySignuture
 		msg = '{}{}{}'.format(mailBodyDear, mailBodyEmbedImage, mailBodySignuture)
 
 		try:
@@ -47,6 +50,33 @@ def submit(request):
 			return HttpResponse(msg)
 		
 		print('...sendEmail end...')
+
+		#sendSMS
+		action = activity.config.smsAction
+		version = activity.config.smsVersion
+		regionId = activity.config.smsRegionId
+		signName = activity.config.smsSignName
+		templateCode = activity.config.smsTemplateCode
+		topic = activity.config.topic
+		user_params = {
+			'Action': action, 
+			"Version": version, 
+			"RegionId": regionId, 			
+			'PhoneNumbers': mobileNo,
+			'SignName': u'{}'.format(signName),
+			'TemplateCode': templateCode 
+		}
+		user_params['TemplateParam'] = {"time":activityChoice,"topic": topic}
+
+		try:
+			print('send SMS begin---')
+			make_request(user_params)
+		except Exception as e:
+			print('!! send SMS eror: !!\n{}'.format(e))
+		else:
+			print('send SMS successfully')
+
+		print('---send SMS over')
 		return HttpResponse(msg)
 	else:
 		return HttpResponse("Get")
@@ -73,7 +103,3 @@ def result(request):
 	}
 		
 	return render(request, 'activity/Result.html', context)
-
-	# return render(request, 'activity/Result.html', {'registerLists':registerLists, 'context': context })
-
-	# return render(request, 'activity/Result.html', {'registerLists':registerLists, 'page':page, 'limit':limit, 'pages':pages, 'count':count, 'prevPage':prevPage, 'nextPage':nextPage})
