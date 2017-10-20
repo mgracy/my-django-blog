@@ -5,7 +5,12 @@ import math
 from .mail import SendEmail
 from .sms import make_request
 import activity.config
+import logging
+from django.utils import timezone
 
+logger = logging.getLogger(__name__)
+now = timezone.localtime(timezone.now())
+logger.debug('{}-{}:'.format(now, __name__))
 # Create your views here.
 def register_list(request):
 	activities = activity.config.activities
@@ -13,11 +18,15 @@ def register_list(request):
 	return render(request, 'activity/Register.html', {'activities':activities, 'lenAct':lenAct})
 
 def submit(request):
+	userAgent = request.META.get('HTTP_USER_AGENT')	
+	if not userAgent :
+		return HttpResponse('{"code":403,"desc":"Forbidden 403"}')
+
 	if request.method =="POST":
-		print('...begin...')
-		referer = request.META.get('HTTP_REFERER')	
+		logger.debug('---submit main logic begin ---')
 		postBody = request.POST
 		myDict = postBody.dict()
+		logger.debug('myDict is {}'.format(myDict))
 		name = myDict[u'name']
 		companyName = myDict[u'companyName']
 		jobTitle = myDict[u'jobTitle']
@@ -30,9 +39,10 @@ def submit(request):
 
 		activityChoice = activityChoice.rstrip(',')
 		Register(name=name, company_name=companyName, title=jobTitle, mobile_no=mobileNo, email_address=emailAddress, created_date=timezone.localtime(timezone.now()),activities_choice=activityChoice).save()
-		print('...end...')
+		logger.debug('---submit main logic end---')
 
 		# sendMail
+		logger.debug('---submit send mail begin ---')
 		mailFrom = activity.config.mailFrom
 		mailSubject = activity.config.mailSubject
 		mailBodyDear = activity.config.mailBodyDear
@@ -46,12 +56,13 @@ def submit(request):
 		except Exception as e:
 			print('*************error**************')
 			print(e)
-			print('*************error**************')
-			return HttpResponse(msg)
+			logger.error('send mail error: {}'.format(e))
+			return HttpResponse(e)
 		
-		print('...sendEmail end...')
+		logger.debug('---submit send mail end---')
 
 		#sendSMS
+		logger.debug('---submit send sms begin ---')
 		action = activity.config.smsAction
 		version = activity.config.smsVersion
 		regionId = activity.config.smsRegionId
@@ -70,13 +81,15 @@ def submit(request):
 
 		try:
 			print('send SMS begin---')
-			make_request(user_params)
+			# make_request(user_params)
 		except Exception as e:
+			logger.error('send sms error: {}'.format(e))
 			print('!! send SMS eror: !!\n{}'.format(e))
+			return HttpResponse(e)
 		else:
 			print('send SMS successfully')
 
-		print('---send SMS over')
+		logger.debug('---submit send sms over ---')
 		return HttpResponse(msg)
 	else:
 		return HttpResponse("Get")
