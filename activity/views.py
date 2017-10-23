@@ -45,7 +45,7 @@ def submit(request):
 		logger.debug('---submit send mail begin ---')
 		mailFrom = activity.config.mailFrom
 		mailSubject = activity.config.mailSubject
-		mailBodyDear = activity.config.mailBodyDear
+		mailBodyDear = activity.config.mailBodyDear.format(name)
 		mailBodyEmbedImage = activity.config.mailBodyEmbedImage
 		mailBodyEmbedImagePath = activity.config.mailBodyEmbedImagePath
 		mailBodySignuture = activity.config.mailBodySignuture
