@@ -81,7 +81,7 @@ def submit(request):
 
 		try:
 			print('send SMS begin---')
-			# make_request(user_params)
+			make_request(user_params)
 		except Exception as e:
 			logger.error('send sms error: {}'.format(e))
 			print('!! send SMS eror: !!\n{}'.format(e))
