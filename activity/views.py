@@ -56,10 +56,10 @@ def submit(request):
 		except Exception as e:
 			print('*************error**************')
 			print(e)
-			logger.error('send mail error: {}'.format(e))
+			logger.error('send mail to {} error: {}'.format(emailAddress, e))
 			return HttpResponse(e)
 		
-		logger.debug('---submit send mail end---')
+		logger.debug('---submit send mail to {} end---'.format(emailAddress))
 
 		#sendSMS
 		logger.debug('---submit send sms begin ---')
@@ -83,14 +83,14 @@ def submit(request):
 			print('send SMS begin---')
 			make_request(user_params)
 		except Exception as e:
-			logger.error('send sms error: {}'.format(e))
+			logger.error('send sms to {} error: {}'.format(mobileNo, e))
 			print('!! send SMS eror: !!\n{}'.format(e))
 			return HttpResponse(e)
 		else:
 			print('send SMS successfully')
 
-		logger.debug('---submit send sms over ---')
-		return HttpResponse(msg)
+		logger.debug('---submit send sms to {} over ---'.format(mobileNo))
+		return render(request, 'activity/RegisterSuccess.html',{"name":name})
 	else:
 		return HttpResponse("Get")
 	
@@ -116,3 +116,6 @@ def result(request):
 	}
 		
 	return render(request, 'activity/Result.html', context)
+
+def report(request):
+	return render(request, 'activity/RegisterSuccess.html',{})	

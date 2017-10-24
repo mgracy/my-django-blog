@@ -1,0 +1,25 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+        <title>Activity</title>
+        <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    </head>
+    <body>
+        <div class="container-fluid">
+            <br>
+            <p>
+                您好 {{name}}（先生/女士），敬请提前十分钟到达现场进行签到。
+            </p>
+            交通：十号线“江湾体育场”站10号口。
+            <p>路线图如下：</p>
+            <p>
+                <div>
+                    <img class="img-responsive" src="{% static 'images/RoadMap.jpg' %}" alt="">
+                </div>
+            </p>
+        </div>        
+    </body>
+</html>
