@@ -5,6 +5,7 @@ import math
 from .mail import SendEmail
 from .sms import make_request
 import activity.config
+import activity.account
 import logging
 from django.utils import timezone
 
@@ -43,7 +44,7 @@ def submit(request):
 
 		# sendMail
 		logger.debug('---submit send mail begin ---')
-		mailFrom = activity.config.mailFrom
+		mailFrom = activity.account.mailFrom
 		mailSubject = activity.config.mailSubject
 		mailBodyDear = activity.config.mailBodyDear.format(name)
 		mailBodyEmbedImage = activity.config.mailBodyEmbedImage

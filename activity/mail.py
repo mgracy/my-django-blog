@@ -5,12 +5,13 @@ import os
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.multipart import MIMEMultipart
-import activity.config
+import activity.account
 
-smtpServer = activity.config.smtpServer
-smtpPort = activity.config.smtpPort
-smtpAccount = activity.config.smtpAccount
-smtpKey = activity.config.smtpKey
+smtpServer = activity.account.smtpServer
+smtpPort = activity.account.smtpPort
+smtpAccount = activity.account.smtpAccount
+smtpKey = activity.account.smtpKey
+
 
 def sendEmail(fromStr, toStr, ccStr, mailSubject, mailBody):
 	msg = MIMEText(mailBody)
@@ -65,8 +66,16 @@ def SendEmail(strFrom, strTo, strCc, strMailSubject, strMailBody, strMailBodyEmb
 	msgRoot.attach(msgImage)
 
 	# Send the email (this example assumes SMTP authentication is required)
+	server = None
 
-	server = smtplib.SMTP_SSL(smtpServer, smtpPort) #实例化smtp服务器
+	if smtpServer == "smtp.office365.com":
+		server = smtplib.SMTP(smtpServer, smtpPort, timeout=20)
+		server.starttls()
+	else:
+		server = smtplib.SMTP_SSL(smtpServer, smtpPort, timeout=20) #实例化smtp服务器
+
 	server.login(smtpAccount, smtpKey)
 	server.sendmail(strFrom, strTo, msgRoot.as_string())
 	server.quit()
+
+
