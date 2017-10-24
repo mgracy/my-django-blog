@@ -8,4 +8,4 @@ db.sqlite3
 files
 migrations
 file.log
-*/account.py
+activity/account.py
