@@ -1,0 +1,25 @@
+{% extends 'activity/base.html' %}
+    
+{% block content %}
+    <h3>Report</h3>
+    <table class="table table-striped table-responsive">
+        <th>No.</th>
+        {% for feedbackQuestion in feedbackQuestions %}
+        <th>{{feedbackQuestion.question_text}}</th>
+        {% endfor %}
+        <th>create date</th>
+        {% for answerSheet in answerSheets%}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ answerSheet.question1 }}</td>
+                <td>{{ answerSheet.question2 }}</td>
+                <td>{{ answerSheet.question3 }}</td>
+                <td>{{ answerSheet.question4 }}</td>
+                <td>{{ answerSheet.question5 }}</td>
+                <td>{{ answerSheet.advice}}</td>
+                <td>{{ answerSheet.created_date|date:'Y-m-d H:i:s'}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

@@ -1,0 +1,201 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />  
+    <title>场景体验反馈表</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style type="text/css">
+    	.required_asterisk{
+    		color: red;
+    		vertical-align: middle
+    	}
+    	p{
+    		color: red;
+    	}
+		#myCanvas{
+			background-image: url({% static 'images/feedback.jpg' %});
+			width: 100%;
+			background-size: 100%;
+		}
+    </style>
+</head>
+
+<body>
+	<canvas id="myCanvas"> 
+	Your browser does not support the canvas element.
+	</canvas>
+    <form action="/activity/feedback" method="post">
+        {% csrf_token %}
+        <div class="container-fluid col-lg-12">	
+            <br>
+            <div>
+                <div class="form-group">
+                    <span><h3>场景体验反馈表</h3></span>
+                    <span>本次活动顺利完成，感谢各位的支持，请您耐心地花几分钟时间填写下列问题。</span>
+                </div>
+            </div>
+            <hr>
+            <div class="activity">
+                {% for feedback in feedbacks %}
+                    <div class="form-group">                    
+                        <label>{{feedback.question_text}}<span class="required_asterisk">*</span></label>
+                        {% for choice in feedback.choice_set.all%}
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="question{{feedback.id}}" id="inlineRadio{{feedback.id}}{{choice.id}}" value="{{choice.choice_text}}"> {{choice.choice_text}}
+                                </label>
+                            </div>
+                        {% empty %}
+                            <textarea class="form-control" name="advice" rows="3"></textarea>
+                        {% endfor %}
+                        <p><br /></p>                              
+                    </div>
+                {% endfor%}                                            
+            </div>
+            <hr>
+            <div class="row">
+            	<div class="form-group text-center">
+    	        	<button id="btnSubmit" class="btn">提交</button>	
+            	</div>
+            </div>
+        </div>    					  
+    </form>
+	<script type="text/javascript" src="{% static 'js/jquery-1.10.0.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript">    
+        $(document).ready(function () {				
+            var search_str = /^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/;
+            $("#emailAddress").change(function () {
+                var email_val = $("#emailAddress").val();
+                if (!search_str.test(email_val)) {
+                	$(this).next('p').text('请填写正确的邮箱地址');
+                    $(this).parent().addClass("has-error");
+                    $("#btnSubmit").prop("disabled", true);
+                    return false;
+                } else {
+                    $(this).parent().removeClass("has-error");
+                    $("#btnSubmit").prop("disabled", false);
+                    $(this).next('p').text('');
+                }
+            });
+			
+			var mobile_str=/^1\d{10}$/;
+			$("#mobileNo").change(function(){
+				var mobileNo_val = $(this).val();
+				if(!mobile_str.test(mobileNo_val)){
+					$(this).next('p').text('请填写正确的手机号码');
+                    $(this).parent().addClass("has-error");
+                    $("#btnSubmit").prop("disabled", true);
+                    return false;
+				}else {
+                    $(this).parent().removeClass("has-error");
+                    $("#btnSubmit").prop("disabled", false);
+                    $(this).next('p').text('');
+                }				
+			});
+			
+			$("input[id='mobileNo']").keyup(function () {
+				var tmptxt = $(this).val();
+				$(this).val(tmptxt.replace(/\D|^0/g, ''));	
+			}).bind("paste", function () {
+				var tmptxt = $(this).val();
+				$(this).val(tmptxt.replace(/\D|^0/g, ''));
+			}).css("ime-mode", "disabled");
+
+            $(".required").change(function() {
+                if ($(this).val() == "") {
+                    $(this).parent().addClass("has-error");
+                    $("#btnSubmit").prop("disabled", true);
+                } else {
+                    if ($(this).attr("id") == "emailAddress" || $(this).attr("id") == "mobileNo") {
+                      
+                    }else{
+						$(this).parent().removeClass("has-error");
+                        $(this).next('p').text('');
+					}
+                }
+                if ($("div").find(".has-error").length <= 0) {
+                    $("#btnSubmit").prop("disabled", false);
+                }
+            });
+
+            $("input:radio").change(function() {
+                if ($(this).is(":checked")) {
+                    $(this).parentsUntil("div.form-group").parent().find("p").text("");
+                    if ($("div").find(".has-error").length <= 0) {
+                        $("#btnSubmit").prop("disabled", false);
+                    }
+                }
+            });
+
+            $("#btnSubmit").click(function () {
+                var requiredFlag = false;
+                $(".required").each(function (i, item) {
+                    if ($(item).val() == "") {
+                        $(item).parent().addClass("has-error");
+                        var labelText = $(item).prev('label').text().replace('*','');
+                        $(item).next('p').text('请填写'+labelText);
+                        requiredFlag = true;
+                    } else {
+                        $(item).parent().removeClass("has-error");
+                    }
+                });
+
+                var radioFormGroup = $("div.radio").parent();
+                var len = radioFormGroup.length;
+                var count = 0;
+                $(radioFormGroup).each(function(i, item){
+                    var labelText = $(item).find("label:first").text();
+                    if($(item).find("input:radio:checked").length>=1){
+                        console.log("11111111111111");
+                        count++;
+                    }else{
+                        $(item).find('p').text('请填写'+labelText);
+                        $("#btnSubmit").prop("disabled", true);
+                        console.log("22222222222222");
+                    }    
+
+                })
+
+                if(!count==len){
+                    return false;
+                }
+                // $("input:checkbox").each(function(i, item){
+                //     if($(item).is(":checked")){
+                //         cbxFlag = true;
+                //     }
+                // })
+  				
+                // if(!cbxFlag){
+                //     var labelText = $(".activity").find("label:first").text().replace('*','');
+                //     $(".activity").find('p').text('请填写'+labelText);
+                //     $("#btnSubmit").prop("disabled", true);
+                //     return false;
+                // }
+
+  				if(requiredFlag)
+  					return false;
+            });
+
+            function getCookie(c_name)
+            {
+                if (document.cookie.length > 0)
+                {
+                    c_start = document.cookie.indexOf(c_name + "=");
+                    if (c_start != -1)
+                    {
+                        c_start = c_start + c_name.length + 1;
+                        c_end = document.cookie.indexOf(";", c_start);
+                        if (c_end == -1) c_end = document.cookie.length;
+                        return unescape(document.cookie.substring(c_start,c_end));
+                    }
+                }
+                return "";
+             }
+        });
+    </script>
+</body>
+</html>

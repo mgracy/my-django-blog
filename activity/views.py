@@ -1,6 +1,7 @@
-from django.shortcuts import render, HttpResponse
-from .models import Register
+from django.shortcuts import render, HttpResponse, HttpResponseRedirect
+from .models import Register, Feedback, AnswerSheet
 from django.utils import timezone
+from django.urls import reverse
 import math
 from .mail import SendEmail
 from .sms import make_request
@@ -116,7 +117,64 @@ def result(request):
 		'registerLists':registerLists
 	}
 		
-	return render(request, 'activity/Result.html', context)
+	return render(request, 'activity/RegisterResult.html', context)
 
 def report(request):
 	return render(request, 'activity/RegisterSuccess.html',{})	
+
+def feedback(request):
+	feedbacks = Feedback.objects.all()
+	if request.method=="POST":
+		try:
+			postData = request.POST
+			ip = get_client_ip(request)
+			name = request.META.get('LOGONSERVER')
+			user_agent = request.META.get('HTTP_USER_AGENT')
+			question={}
+			for i in range(1, len(feedbacks)):
+				question[i] = postData[u'question{}'.format(i)]
+			advice = postData[u'advice']
+			created_date = timezone.localtime(timezone.now())
+			AnswerSheet(
+				ip=ip,
+				name=name,
+				user_agent=user_agent,
+				question1=question[1],
+				question2=question[2],
+				question3=question[3],
+				question4=question[4],
+				question5=question[5],
+				advice=advice,
+				created_date=created_date).save()
+			logger.debug("save the AnswerSheet successfully.")		
+		except Exception as e:
+			logger.error("save the AnswerSheet error{}.".format(e))	
+			return HttpResponse('{}'.format(e))
+		finally:
+			return HttpResponseRedirect(reverse('activity:feedback_over'))
+
+	else:
+		return render(request, 'activity/Feedback.html', {'feedbacks':feedbacks})
+
+def feedback_result(request):
+
+	feedbackQuestions = Feedback.objects.all()
+	answerSheets = AnswerSheet.objects.all()	
+
+	context = {
+		'feedbackQuestions':feedbackQuestions,
+		'answerSheets':answerSheets
+	}
+		
+	return render(request, 'activity/FeedbackResult.html', context)
+
+def feedback_over(request):
+	return render(request, 'activity/FeedbackSuccess.html')	
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip	

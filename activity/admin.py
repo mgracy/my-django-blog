@@ -1,4 +1,17 @@
 from django.contrib import admin
-from .models import Register
+from .models import Register, Feedback, Choice
 # Register your models here.
 admin.site.register(Register)
+
+class ChoiceInline(admin.TabularInline):
+	model = Choice
+	extra = 3
+
+class FeedbackAdmin(admin.ModelAdmin):
+	fieldsets = [
+		(None, {'fields': ['question_text']}),
+		('Date information', {'fields': ['pub_date'], 'classes':['collapse']}),
+	]
+	inlines = [ChoiceInline]	
+
+admin.site.register(Feedback, FeedbackAdmin)
