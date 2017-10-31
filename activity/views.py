@@ -99,6 +99,7 @@ def submit(request):
 
 @login_required
 def result(request):
+	userInfo = request.user
 	page = request.GET.get('page', '1')
 	page = int(page)
 	limit = 10
@@ -116,7 +117,8 @@ def result(request):
 		'count': count,
 		'prevPage': '/activity/result?page='+ str(page - 1),
 		'nextPage': '/activity/result?page='+ str(page + 1),
-		'registerLists':registerLists
+		'registerLists':registerLists,
+		'userInfo': userInfo
 	}
 		
 	return render(request, 'activity/RegisterResult.html', context)
@@ -160,13 +162,14 @@ def feedback(request):
 
 @login_required
 def feedback_result(request):
-
+	userInfo = request.user
 	feedbackQuestions = Feedback.objects.all()
 	answerSheets = AnswerSheet.objects.all()	
 
 	context = {
 		'feedbackQuestions':feedbackQuestions,
-		'answerSheets':answerSheets
+		'answerSheets':answerSheets,
+		'userInfo': userInfo
 	}
 		
 	return render(request, 'activity/FeedbackResult.html', context)
