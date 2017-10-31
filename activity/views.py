@@ -9,6 +9,7 @@ import activity.config
 import activity.account
 import logging
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required
 
 logger = logging.getLogger(__name__)
 now = timezone.localtime(timezone.now())
@@ -95,7 +96,8 @@ def submit(request):
 		return render(request, 'activity/RegisterSuccess.html',{"name":name})
 	else:
 		return HttpResponse("Get")
-	
+
+@login_required
 def result(request):
 	page = request.GET.get('page', '1')
 	page = int(page)
@@ -156,6 +158,7 @@ def feedback(request):
 	else:
 		return render(request, 'activity/Feedback.html', {'feedbacks':feedbacks})
 
+@login_required
 def feedback_result(request):
 
 	feedbackQuestions = Feedback.objects.all()
