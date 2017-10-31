@@ -9,7 +9,7 @@ activities = (
 mailSubject = u"「报名已成功 感谢您的支持！ 」"
 mailBodyDear = u"您好 {}（先生/女士），敬请提前十分钟到达现场进行签到。<br />交通：十号线“江湾体育场”站10号口。<br />路线图如下：<br />"
 mailBodyEmbedImage = "<img src='cid:image1' />"
-mailBodyEmbedImagePath = "static/images/RoadMap.jpg"
+mailBodyEmbedImagePath = "static/activity/images/RoadMap.jpg"
 mailBodySignuture = u"<br />【GTI Shanghai】静候您的莅临，谢谢。"
 
 #sms setting
