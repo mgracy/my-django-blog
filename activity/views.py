@@ -10,6 +10,7 @@ import activity.account
 import logging
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
+from django.contrib import auth
 
 logger = logging.getLogger(__name__)
 now = timezone.localtime(timezone.now())
@@ -84,7 +85,8 @@ def submit(request):
 
 		try:
 			print('send SMS begin---')
-			make_request(user_params)
+			obj = make_request(user_params)
+			logger.debug('send sms to, response from sms interface is {}'.format(obj))
 		except Exception as e:
 			logger.error('send sms to {} error: {}'.format(mobileNo, e))
 			print('!! send SMS eror: !!\n{}'.format(e))
@@ -160,7 +162,7 @@ def feedback(request):
 	else:
 		return render(request, 'activity/Feedback.html', {'feedbacks':feedbacks})
 
-# @login_required
+@login_required
 def feedback_result(request):
 	userInfo = request.user
 	feedbackQuestions = Feedback.objects.all()
@@ -184,22 +186,3 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip	
-
-def login(request):
-	if request.method =="POST":
-		refer = request.META.get('HTTP_REFERER','/')
-		print(refer)
-		forward_url = request.GET['next']
-		# if forward_url
-		print(forward_url)
-		# forward_url = forward_url.replace('/activity','')
-		# forward_url = "activity:feedback_res"
-		print(111111111111)
-		print(forward_url)
-		return HttpResponseRedirect(forward_url)
-		# return HttpResponseRedirect(reverse('activity:register_res'))
-		# return HttpResponseRedirect(reverse(forward_url))
-		# return HttpResponseRedirect(reverse(forward_url ,args=[request.user.username]))
-	else:
-		return render(request, 'activity/login.html', {})
-	# return HttpResponse('<h1>Welcome back {}</h1>'.format(request.user.username))    
