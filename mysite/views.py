@@ -26,7 +26,9 @@ def login(request):
 
 		if user is not None and user.is_active:
 			auth.login(request, user)
-			forward_url = request.GET['next']
+			forward_url = '/'
+			if request.GET:
+				forward_url = request.GET['next']
 			return HttpResponseRedirect(forward_url)
 		else:
 			message = 'We didn’t recognize that password.'
