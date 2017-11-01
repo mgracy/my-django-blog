@@ -75,7 +75,6 @@ def make_request(user_params, quiet=False):
         raise SystemExit(e)
     try:
         obj = json.loads(response)        
-        print('send sms interface callback {}'.format(obj))
         if quiet:   
             return obj
     except ValueError as e:
