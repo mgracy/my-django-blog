@@ -82,4 +82,3 @@ def make_request(user_params, quiet=False):
         raise SystemExit(e)
     json.dump(obj, sys.stdout, sort_keys=True, indent=2)
     sys.stdout.write('\n')
-    return obj

@@ -84,8 +84,7 @@ def submit(request):
 
 		try:
 			print('send SMS begin---')
-			obj = make_request(user_params)
-			logger.debug('send sms interface callback {}'.format(obj))
+			make_request(user_params)
 		except Exception as e:
 			logger.error('send sms to {} error: {}'.format(mobileNo, e))
 			print('!! send SMS eror: !!\n{}'.format(e))
