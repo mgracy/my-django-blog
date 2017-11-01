@@ -85,6 +85,7 @@ def submit(request):
 		try:
 			print('send SMS begin---')
 			obj = make_request(user_params)
+			logger.debug('send sms interface callback {}'.format(obj))
 		except Exception as e:
 			logger.error('send sms to {} error: {}'.format(mobileNo, e))
 			print('!! send SMS eror: !!\n{}'.format(e))
@@ -92,7 +93,6 @@ def submit(request):
 		else:
 			print('send SMS successfully')
 
-		logger.debug('send sms interface callback {}'.format(obj))
 		logger.debug('---submit send sms to {} over -{}--'.format(mobileNo, timezone.localtime(timezone.now())))
 		return render(request, 'activity/RegisterSuccess.html',{"name":name})
 	else:
