@@ -12,7 +12,6 @@ import json
 import ssl
 import activity.account
 
-
 access_key_id = activity.account.accessKeyId
 access_key_secret = activity.account.accessKeySecret
 server_address = activity.account.smsServerAddress #'http://dysmsapi.aliyuncs.com' #'https://sms.aliyuncs.com'
@@ -65,26 +64,22 @@ def compose_url(user_params):
 
 
 def make_request(user_params, quiet=False):
-        url = compose_url(user_params)
-        request = urllib.request.Request(url)
-        try:
-            context = ssl._create_unverified_context()
-            conn = urllib.request.urlopen(request, context=context)
-            response = conn.read().decode('utf-8')
-        except urllib.error.HTTPError as e:
-            print((e.read().strip()))
-            raise SystemExit(e)
-        try:
-            obj = json.loads(response)
-            if quiet:
-                return obj
-        except ValueError as e:
-            raise SystemExit(e)
-        json.dump(obj, sys.stdout, sort_keys=True, indent=2)
-        sys.stdout.write('\n')
-
-
-
-
-# print(sys.stdin.encoding)
-# make_request(user_params)
+    url = compose_url(user_params)
+    request = urllib.request.Request(url)
+    try:
+        context = ssl._create_unverified_context()
+        conn = urllib.request.urlopen(request, context=context)
+        response = conn.read().decode('utf-8')
+    except urllib.error.HTTPError as e:
+        print((e.read().strip()))
+        raise SystemExit(e)
+    try:
+        obj = json.loads(response)        
+        print('send sms interface callback {}'.format(obj))
+        if quiet:   
+            return obj
+    except ValueError as e:
+        raise SystemExit(e)
+    json.dump(obj, sys.stdout, sort_keys=True, indent=2)
+    sys.stdout.write('\n')
+    return obj

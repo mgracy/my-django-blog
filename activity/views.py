@@ -26,7 +26,7 @@ def submit(request):
 		return HttpResponse('{"code":403,"desc":"Forbidden 403"}')
 
 	if request.method =="POST":
-		logger.debug('---submit main logic begin ---')
+		logger.debug('---submit main logic begin -{}--'.format(timezone.localtime(timezone.now())))
 		postBody = request.POST
 		myDict = postBody.dict()
 		logger.debug('myDict is {}'.format(myDict))
@@ -84,7 +84,7 @@ def submit(request):
 
 		try:
 			print('send SMS begin---')
-			make_request(user_params)
+			obj = make_request(user_params)
 		except Exception as e:
 			logger.error('send sms to {} error: {}'.format(mobileNo, e))
 			print('!! send SMS eror: !!\n{}'.format(e))
@@ -92,7 +92,8 @@ def submit(request):
 		else:
 			print('send SMS successfully')
 
-		logger.debug('---submit send sms to {} over ---'.format(mobileNo))
+		logger.debug('send sms interface callback {}'.format(obj))
+		logger.debug('---submit send sms to {} over -{}--'.format(mobileNo, timezone.localtime(timezone.now())))
 		return render(request, 'activity/RegisterSuccess.html',{"name":name})
 	else:
 		return HttpResponse("Get")
@@ -160,7 +161,7 @@ def feedback(request):
 	else:
 		return render(request, 'activity/Feedback.html', {'feedbacks':feedbacks})
 
-@login_required
+# @login_required
 def feedback_result(request):
 	userInfo = request.user
 	feedbackQuestions = Feedback.objects.all()
@@ -184,3 +185,22 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip	
+
+def login(request):
+	if request.method =="POST":
+		refer = request.META.get('HTTP_REFERER','/')
+		print(refer)
+		forward_url = request.GET['next']
+		# if forward_url
+		print(forward_url)
+		# forward_url = forward_url.replace('/activity','')
+		# forward_url = "activity:feedback_res"
+		print(111111111111)
+		print(forward_url)
+		return HttpResponseRedirect(forward_url)
+		# return HttpResponseRedirect(reverse('activity:register_res'))
+		# return HttpResponseRedirect(reverse(forward_url))
+		# return HttpResponseRedirect(reverse(forward_url ,args=[request.user.username]))
+	else:
+		return render(request, 'activity/login.html', {})
+	# return HttpResponse('<h1>Welcome back {}</h1>'.format(request.user.username))    
