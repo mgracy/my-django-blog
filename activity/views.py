@@ -11,6 +11,7 @@ import logging
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib import auth
+import time
 
 logger = logging.getLogger(__name__)
 now = timezone.localtime(timezone.now())
@@ -67,24 +68,10 @@ def submit(request):
 
 		#sendSMS
 		logger.debug('---submit send sms begin ---')
-		action = activity.config.smsAction
-		version = activity.config.smsVersion
-		regionId = activity.config.smsRegionId
-		signName = activity.config.smsSignName
-		templateCode = activity.config.smsTemplateCode
-		topic = activity.config.topic
-		user_params = {
-			'Action': action, 
-			"Version": version, 
-			"RegionId": regionId, 			
-			'PhoneNumbers': mobileNo,
-			'SignName': u'{}'.format(signName),
-			'TemplateCode': templateCode 
-		}
-		user_params['TemplateParam'] = {"time":activityChoice,"topic": topic}
 
 		try:
 			print('send SMS begin---')
+			user_params = build_user_params(mobileNo, activityChoice)
 			obj = make_request(user_params)
 			logger.debug('send sms to, response from sms interface is {}'.format(obj))
 		except Exception as e:
@@ -186,3 +173,128 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip	
+
+
+def updateActivity(request):
+	if request.method == "POST":
+		httpReferer = request.META.get("HTTP_REFERER")
+		userAgent = request.META.get("HTTP_USER_AGENT")
+		if httpReferer and userAgent:
+			dicts = dict(request.POST)
+			for key in dicts.keys():
+				if key.find('cxSMS') >= 0:
+					id = key.replace('cxSMS','')
+					register = Register.objects.get(id=id)
+					register.is_sendsms = True
+					register.save()
+				else:
+					pass
+
+			return HttpResponse('{"status":200}')
+		else:
+			return HttpResponse('{"status":403, "text":"Forbidden"}')					
+
+	else:
+		return HttpResponse('{"status":403, "text":"Forbidden"}')
+
+@login_required
+def sendMailsForRegisters(request, days=1):
+	'''
+	This method will automatically send sms to those whom have registered with the field is_sendsms = True.
+	The logic is system would send sms to user automatically days ahead.
+	'''
+	days = int(days)
+	registers = Register.objects.filter(is_sendsms = True)
+
+	totals = len(registers)
+	i = 0
+	month = timezone.now().month
+	day = timezone.now().day
+	for register in registers:
+		mobileNo = register.mobile_no
+		activityChoice = register.activities_choice
+		listChoices = activityChoice.split(',')
+		for listChoice in listChoices:
+			strDate = listChoice.split(' ')[0]
+			str2Date = time.strptime(strDate, u'%m月%d日')
+			if month == str2Date.tm_mon and day + days == str2Date.tm_mday:
+				logger.debug('---sendMailsForRegisters send sms begin --{}-{}'.format(i, mobileNo))
+				user_params = build_user_params(mobileNo, activityChoice)
+				try:
+					print('send SMS begin---{}'.format(mobileNo))
+					obj = make_request(user_params)
+					logger.debug('send sms to, response from sms interface is {}'.format(obj))
+				except Exception as e:
+					logger.error('send sms to {} error: {}'.format(mobileNo, e))
+					print('!! send SMS eror: !!\n{}'.format(e))
+					return HttpResponse(e)
+				else:
+					i += 1
+					print('send SMS successfully {}-{}'.format(i, mobileNo))
+					logger.debug('---sendMailsForRegisters send sms end --{}-{}'.format(i, mobileNo))
+				break
+			else:
+				continue			
+
+	msg = 'send SMS successfully {}/{}'.format(i, totals)
+	print(msg)
+	logger.debug(msg)
+	response = {
+		"status": 200,
+		"text": msg
+	}
+
+	return HttpResponse(str(response).replace("'",'"'))
+
+@login_required
+def sendMailsForRegistersID(request, pk):
+	registers = Register.objects.filter(is_sendsms = True).filter(id=pk)
+
+	totals = len(registers)
+	i = 0
+	for register in registers:
+		mobileNo = register.mobile_no
+		activityChoice = register.activities_choice
+		
+		logger.debug('---sendMailsForRegisters send sms begin ---')
+		user_params = build_user_params(mobileNo, activityChoice)
+		try:
+			print('send SMS begin---{}'.format(mobileNo))
+			obj = make_request(user_params)
+			logger.debug('send sms to, response from sms interface is {}'.format(obj))
+		except Exception as e:
+			logger.error('send sms to {} error: {}'.format(mobileNo, e))
+			print('!! send SMS eror: !!\n{}'.format(e))
+			return HttpResponse(e)
+		else:
+			i += 1
+			print('send SMS successfully {}-{}'.format(i, mobileNo))
+
+	msg = 'send SMS successfully {}/{}-{}'.format(i, totals, pk)
+	print(msg)
+	logger.debug(msg)
+	response = {
+		"status": 200,
+		"text": msg
+	}
+
+	return HttpResponse(str(response).replace("'",'"'))
+
+def build_user_params(mobileNo, activityChoice):
+	action = activity.config.smsAction
+	version = activity.config.smsVersion
+	regionId = activity.config.smsRegionId
+	signName = activity.config.smsSignName
+	templateCode = activity.config.smsTemplateCode
+	topic = activity.config.topic
+	user_params = {
+		'Action': action, 
+		"Version": version, 
+		"RegionId": regionId, 			
+		'PhoneNumbers': mobileNo,
+		'SignName': u'{}'.format(signName),
+		'TemplateCode': templateCode 
+	}
+	user_params['TemplateParam'] = {"time":activityChoice,"topic": topic}
+
+	return user_params	

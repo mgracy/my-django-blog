@@ -1,29 +1,39 @@
 {% extends 'activity/base.html' %}
     
 {% block content %}
-    <h3>Report</h3>
-    <table class="table table-striped table-responsive">
-        <th>No.</th>
-        <th>name</th>
-        <th>company name</th>
-        <th>title</th>
-        <th>mobile no</th>
-        <th>email address</th>
-        <th>activities</th>
-        <th>create date</th>
-        {% for registerList in registerLists%}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ registerList.name }}</td>
-                <td>{{ registerList.company_name }}</td>
-                <td>{{ registerList.title }}</td>
-                <td>{{ registerList.mobile_no }}</td>
-                <td>{{ registerList.email_address }}</td>
-                <td>{{ registerList.activities_choice}}</td>
-                <td>{{ registerList.created_date|date:'Y-m-d H:i:s'}}</td>
-            </tr>
-        {% endfor %}
-    </table>
-
+    <form action='/activity/updateActivity' method="post">
+        {% csrf_token %}
+        <h3>Report</h3>        
+        <table class="table table-striped table-responsive">
+            <th style="width: 30px;">No.</th>
+            <th class="col-md-1">name</th>
+            <th class="col-md-2">company name</th>
+            <th class="col-md-1">title</th>
+            <th class="col-md-1">mobile no</th>
+            <th class="col-md-1">email address</th>
+            <th class="col-md-3">activities</th>
+            <th class="col-md-1">create date</th>
+            <th class="col-md-1"><button type="submit" class="btn btn-sm btn-default">Send</button></th>
+            {% for registerList in registerLists%}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ registerList.name }}</td>
+                    <td>{{ registerList.company_name }}</td>
+                    <td>{{ registerList.title }}</td>
+                    <td>{{ registerList.mobile_no }}</td>
+                    <td>{{ registerList.email_address }}</td>
+                    <td>{{ registerList.activities_choice}}</td>
+                    <td>{{ registerList.created_date|date:'Y-m-d H:i:s'}}</td>
+                    <td>{% if registerList.is_sendsms %}
+                            <div class="checkbox"><label><input name="cxSMS{{registerList.id}}" type="checkbox" checked="checked"><strong>SMS</strong></label></div>
+                        {% else %}
+                            <div class="checkbox"><label><input name="cxSMS{{registerList.id}}" type="checkbox">SMS</label></div>
+                        {% endif%}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </form>
+    
     {% include 'activity/page.html' %}
 {% endblock %}

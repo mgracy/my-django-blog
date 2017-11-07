@@ -4,10 +4,17 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth.models import User
 
 def index(request):
-	return HttpResponse('<h1>Index</h1>')
+	user = request.user
+	http_referer = request.META.get('HTTP_REFERER')
+	print('http_referer is {}'.format(http_referer))
+	if not http_referer:
+		http_referer = "/accounts/login"
+	else:
+		http_referer = "/accounts/login?next={}".format(http_referer)
+	
+	return render(request, 'activity/index.html',{'user':user, 'http_referer':http_referer})
 
 def finduser(request):
-	print(3333333333333333333333333)
 	user = User.objects.filter(username=request.GET['username'])	
 	if user:
 		return HttpResponse("{'code':200,'text':'the account is exists.'}")

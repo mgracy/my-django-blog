@@ -10,6 +10,7 @@ class Register(models.Model):
 	email_address = models.CharField(max_length=50)
 	created_date = models.DateTimeField(blank=True, null=True)
 	activities_choice = models.CharField(max_length=100, null=True)	
+	is_sendsms = models.BooleanField(default=False)
 
 # class Activity_Config(models.Model):
 # 	event_organizer = models.CharField(max_length=50)
