@@ -1,5 +1,5 @@
 from django.shortcuts import render, HttpResponse, HttpResponseRedirect
-from .models import Register, Feedback, AnswerSheet
+from .models import Register, Feedback, AnswerSheet, Consult
 from django.utils import timezone
 from django.urls import reverse
 import math
@@ -101,26 +101,23 @@ def consultSubmit(request):
 		logger.debug('myDict is {}'.format(myDict))
 		name = myDict[u'name']
 		companyName = myDict[u'companyName']
-		jobTitle = myDict[u'jobTitle']
 		mobileNo = myDict['mobileNo']
 		emailAddress = myDict['emailAddress']
-		activityChoice = ''
-		for k,v in activity.config.activities:
-			if k in myDict:
-				activityChoice += myDict[k] + ','
+		questions = myDict['questions']
+		userAgent = request.META.get("HTTP_USER_AGENT")
+		ip = get_client_ip(request)
 
-		activityChoice = activityChoice.rstrip(',')
-		Register(name=name, company_name=companyName, title=jobTitle, mobile_no=mobileNo, email_address=emailAddress, created_date=timezone.localtime(timezone.now()),activities_choice=activityChoice).save()
+		Consult(name=name, company_name=companyName, mobile_no=mobileNo, email_address=emailAddress, created_date=timezone.localtime(timezone.now()),questions=questions, ip=ip, user_agent=userAgent).save()
 		logger.debug('---submit main logic end---')
 
 		# sendMail
 		logger.debug('---submit send mail begin ---')
 		mailFrom = activity.account.mailFrom
-		mailSubject = activity.config.mailSubject
-		mailBodyDear = activity.config.mailBodyDear.format(name)
-		mailBodyEmbedImage = activity.config.mailBodyEmbedImage
-		mailBodyEmbedImagePath = activity.config.mailBodyEmbedImagePath
-		mailBodySignuture = activity.config.mailBodySignuture
+		mailSubject = activity.config.consult_mailSubject
+		mailBodyDear = activity.config.consult_mailBodyDear.format(name)
+		mailBodyEmbedImage = activity.config.consult_mailBodyEmbedImage
+		mailBodyEmbedImagePath = activity.config.consult_mailBodyEmbedImagePath
+		mailBodySignuture = activity.config.consult_mailBodySignuture
 		msg = '{}{}{}'.format(mailBodyDear, mailBodyEmbedImage, mailBodySignuture)
 
 		try:
@@ -138,7 +135,7 @@ def consultSubmit(request):
 
 		try:
 			print('send SMS begin---')
-			user_params = build_user_params(mobileNo, activityChoice)
+			user_params = build_user_params(mobileNo, '')
 			obj = make_request(user_params)
 			logger.debug('send sms to, response from sms interface is {}'.format(obj))
 		except Exception as e:

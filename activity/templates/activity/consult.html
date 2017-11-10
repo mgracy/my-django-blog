@@ -27,7 +27,7 @@
 	<canvas id="myCanvas"> 
 	Your browser does not support the canvas element.
 	</canvas>
-    <form action="/activity/submit/" method="post">
+    <form action="/activity/consultSubmit/" method="post">
         {% csrf_token %}
         <div class="container-fluid col-lg-12">	
             <div class="form">
@@ -53,7 +53,7 @@
                 </div>
                 <div class="form-group">
                     <label for="questions">咨询问题 <span class="required_asterisk">*</span></label>
-                    <input type="email" class="form-control required" name="questions" id="questions">
+                    <input type="text" class="form-control required" name="questions" id="questions">
                     <p></p>
                 </div>                
             </div>          
@@ -158,20 +158,6 @@
                         $(item).parent().removeClass("has-error");
                     }
                 });
-
-                var cbxFlag = false;
-                $("input:checkbox").each(function(i, item){
-                    if($(item).is(":checked")){
-                        cbxFlag = true;
-                    }
-                })
-  				
-                if(!cbxFlag){
-                    var labelText = $(".activity").find("label:first").text().replace('*','');
-                    $(".activity").find('p').text('请填写'+labelText);
-                    $("#btnSubmit").prop("disabled", true);
-                    return false;
-                }
 
   				if(requiredFlag)
   					return false;

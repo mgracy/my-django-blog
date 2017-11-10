@@ -55,15 +55,18 @@ def SendEmail(strFrom, strTo, strCc, strMailSubject, strMailBody, strMailBodyEmb
 
 	# This example assumes the image is in the current directory
 	BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-	print('BASE_DIR: {}'.format(BASE_DIR))
-	imgs = os.path.join(BASE_DIR, strMailBodyEmbedImagePath)
-	fp = open(imgs, 'rb')
-	msgImage = MIMEImage(fp.read())
-	fp.close()
+	if len(strMailBodyEmbedImagePath) > 1:
+		print('BASE_DIR: {}'.format(BASE_DIR))
+		imgs = os.path.join(BASE_DIR, strMailBodyEmbedImagePath)
+		fp = open(imgs, 'rb')
+		msgImage = MIMEImage(fp.read())
+		fp.close()
 
-	# Define the image's ID as referenced above
-	msgImage.add_header('Content-ID', '<image1>')
-	msgRoot.attach(msgImage)
+		# Define the image's ID as referenced above
+		msgImage.add_header('Content-ID', '<image1>')
+		msgRoot.attach(msgImage)
+	else:
+		print('No image in this mail body')
 
 	# Send the email (this example assumes SMTP authentication is required)
 	server = None
