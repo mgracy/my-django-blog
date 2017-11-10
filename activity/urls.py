@@ -5,6 +5,8 @@ app_name = 'activity'
 urlpatterns = [
     url(r'^$',views.register_list, name = 'register_list' ),
     url(r'^submit/$', views.submit),
+    url(r'^consultSubmit/$', views.consultSubmit),
+    url(r'^consult/$', views.consult),
     url(r'^result/$', views.result, name='register_res'),
     url(r'^report/$', views.report),
     url(r'^feedback/$', views.feedback),

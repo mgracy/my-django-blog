@@ -22,7 +22,74 @@ def register_list(request):
 	lenAct = len(activities)
 	return render(request, 'activity/Register.html', {'activities':activities, 'lenAct':lenAct})
 
+def consult(request):
+	return render(request, 'activity/consult.html')	
+
 def submit(request):
+	userAgent = request.META.get('HTTP_USER_AGENT')	
+	if not userAgent :
+		return HttpResponse('{"code":403,"desc":"Forbidden 403"}')
+
+	if request.method =="POST":
+		logger.debug('---submit main logic begin -{}--'.format(timezone.localtime(timezone.now())))
+		postBody = request.POST
+		myDict = postBody.dict()
+		logger.debug('myDict is {}'.format(myDict))
+		name = myDict[u'name']
+		companyName = myDict[u'companyName']
+		jobTitle = myDict[u'jobTitle']
+		mobileNo = myDict['mobileNo']
+		emailAddress = myDict['emailAddress']
+		activityChoice = ''
+		for k,v in activity.config.activities:
+			if k in myDict:
+				activityChoice += myDict[k] + ','
+
+		activityChoice = activityChoice.rstrip(',')
+		Register(name=name, company_name=companyName, title=jobTitle, mobile_no=mobileNo, email_address=emailAddress, created_date=timezone.localtime(timezone.now()),activities_choice=activityChoice).save()
+		logger.debug('---submit main logic end---')
+
+		# sendMail
+		logger.debug('---submit send mail begin ---')
+		mailFrom = activity.account.mailFrom
+		mailSubject = activity.config.mailSubject
+		mailBodyDear = activity.config.mailBodyDear.format(name)
+		mailBodyEmbedImage = activity.config.mailBodyEmbedImage
+		mailBodyEmbedImagePath = activity.config.mailBodyEmbedImagePath
+		mailBodySignuture = activity.config.mailBodySignuture
+		msg = '{}{}{}'.format(mailBodyDear, mailBodyEmbedImage, mailBodySignuture)
+
+		try:
+			SendEmail(mailFrom, emailAddress, None, mailSubject, msg, mailBodyEmbedImagePath)
+		except Exception as e:
+			print('*************error**************')
+			print(e)
+			logger.error('send mail to {} error: {}'.format(emailAddress, e))
+			return HttpResponse(e)
+		
+		logger.debug('---submit send mail to {} end---'.format(emailAddress))
+
+		#sendSMS
+		logger.debug('---submit send sms begin ---')
+
+		try:
+			print('send SMS begin---')
+			user_params = build_user_params(mobileNo, activityChoice)
+			obj = make_request(user_params)
+			logger.debug('send sms to, response from sms interface is {}'.format(obj))
+		except Exception as e:
+			logger.error('send sms to {} error: {}'.format(mobileNo, e))
+			print('!! send SMS eror: !!\n{}'.format(e))
+			return HttpResponse(e)
+		else:
+			print('send SMS successfully')
+
+		logger.debug('---submit send sms to {} over -{}--'.format(mobileNo, timezone.localtime(timezone.now())))
+		return render(request, 'activity/RegisterSuccess.html',{"name":name})
+	else:
+		return HttpResponse("Get")
+
+def consultSubmit(request):
 	userAgent = request.META.get('HTTP_USER_AGENT')	
 	if not userAgent :
 		return HttpResponse('{"code":403,"desc":"Forbidden 403"}')
