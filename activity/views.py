@@ -185,7 +185,9 @@ def feedback(request):
 		try:
 			postData = request.POST
 			ip = get_client_ip(request)
-			name = request.META.get('LOGONSERVER')
+			name = request.META.get('LOGONSERVER') 
+			if name == None or name == "":
+				name = 'guest'
 			user_agent = request.META.get('HTTP_USER_AGENT')
 			question={}
 			for i in range(1, len(feedbacks)):
