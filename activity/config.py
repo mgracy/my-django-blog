@@ -111,7 +111,7 @@ consult_mailBodySignuture = u"""
 <tr>
 <td width="126" valign="top" style="width:94.65pt; padding:4.5pt 0cm 0cm 0cm">
 <div class="x_MsoNormal" style="text-align:justify; text-justify:inter-ideograph; line-height:9.0pt">
-<span style=""><span lang="EN-US" style="font-size: 7.5pt; font-family: Helvetica, sans-serif, serif, EmojiFont; color: rgb(0, 32, 96);"><img naturalheight="79" naturalwidth="189" src="http://weixin.gti.com.cn:8000/static/activity/images/gti_slogo.png" border="0" width="126" height="53" id="x_图片_x0020_1" alt="cid:image001.png@01D2959A.6F138C60" style="width: 1.3125in; height: 0.5486in; cursor: pointer;"></span></span><span style=""><span lang="EN-US" style="font-size: 7.5pt; font-family: Helvetica, sans-serif, serif, EmojiFont; color: rgb(0, 32, 96);"></span></span></div>
+<span style=""><span lang="EN-US" style="font-size: 7.5pt; font-family: Helvetica, sans-serif, serif, EmojiFont; color: rgb(0, 32, 96);"><img src="http://weixin.gti.com.cn:8000/static/activity/images/gti_slogo.png" border="0" alt="GTI Logo" style="width: 1.3125in; height: 0.5486in; cursor: pointer;"></span></span><span style=""><span lang="EN-US" style="font-size: 7.5pt; font-family: Helvetica, sans-serif, serif, EmojiFont; color: rgb(0, 32, 96);"></span></span></div>
 </td>
 
 <td width="611" colspan="2" valign="top" style="width:458.2pt; padding:6.0pt 0cm 0cm 0cm">
@@ -127,7 +127,7 @@ consult_mailBodySignuture = u"""
 </tr>
 </tbody>
 </table>
-<div class="x_MsoNormal" style="text-align:justify; text-justify:inter-ideograph"><span style=""></span><a href="https://mp.weixin.qq.com/s/QT8vtHk3tZ9YR3J5jwPJeg" target="_blank" rel="noopener noreferrer"><span style=""><span lang="EN-US" style="color:#002060; text-decoration:none"><img naturalheight="308" naturalwidth="556" src="http://weixin.gti.com.cn:8000/static/activity/images/signature.jpg" border="0" width="371" height="205" id="x_图片_x0020_14" style="width: 3.8611in; height: 2.1388in;"></span></span><span style=""></span></a><span style=""></span><span lang="EN-US" style="font-family: 微软雅黑, sans-serif, serif, EmojiFont; color: rgb(0, 32, 96);"></span></div>
+<div class="x_MsoNormal" style="text-align:justify; text-justify:inter-ideograph"><span style=""></span><a href="https://mp.weixin.qq.com/s/QT8vtHk3tZ9YR3J5jwPJeg" target="_blank" rel="noopener noreferrer"><span style=""><span lang="EN-US" style="color:#002060; text-decoration:none"><img src="http://weixin.gti.com.cn:8000/static/activity/images/signature.jpg" alt="广州科宸上海分公司业务介绍" border="0" style="width: 3.8611in; height: 2.1388in;"></span></span><span style=""></span></a><span style=""></span><span lang="EN-US" style="font-family: 微软雅黑, sans-serif, serif, EmojiFont; color: rgb(0, 32, 96);"></span></div>
 </div>
 </div>
 """

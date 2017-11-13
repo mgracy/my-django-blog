@@ -38,6 +38,10 @@ def SendEmail(strFrom, strTo, strCc, strMailSubject, strMailBody, strMailBodyEmb
 	msgRoot['Subject'] = strMailSubject
 	msgRoot['From'] = strFrom
 	msgRoot['To'] = strTo
+	msgRoot['Bcc'] = strCc
+	if strCc:
+		print('strCc: {}'.format(strCc))
+		strTo = [strTo, strCc]
 	msgRoot.preamble = 'This is a multi-part message in MIME format.'
 
 	# Encapsulate the plain and HTML versions of the message body in an
