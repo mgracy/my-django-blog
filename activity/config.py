@@ -20,7 +20,7 @@ consult_mailBodyEmbedImagePath = ""
 consult_mailBodySignuture = u"""
 <div lang="ZH-CN" link="#0563C1" vlink="#954F72" style="">
 <div class="x_WordSection1">
-<div class="x_MsoNormal" style="text-align:justify; text-justify:inter-ideograph"><a name="x__Hlk493859792" target="_blank" rel="noopener noreferrer"><span style="color:#002060">————————————————</span></a><span style=""><span lang="EN-US" style="font-family: Georgia, serif, serif, EmojiFont; color: rgb(0, 32, 96);"></span></span></div>
+<div class="x_MsoNormal" style="text-align:justify; text-justify:inter-ideograph"><a name="x__Hlk493859792" target="_blank" rel="noopener noreferrer"><span style="color:#002060">——————————————————</span></a><span style=""><span lang="EN-US" style="font-family: Georgia, serif, serif, EmojiFont; color: rgb(0, 32, 96);"></span></span></div>
 <span style=""></span><span style=""></span><span style=""></span><span style=""></span><table class="x_MsoNormalTable" border="0" cellspacing="0" cellpadding="0" width="737" style="width:552.85pt">
 <tbody>
 <tr>
