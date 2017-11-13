@@ -104,8 +104,8 @@ def registerResult(request):
 		'limit': limit ,
 		'pages': pages,
 		'count': count,
-		'prevPage': '/activity/result?page='+ str(page - 1),
-		'nextPage': '/activity/result?page='+ str(page + 1),
+		'prevPage': '/activity/register/res?page='+ str(page - 1),
+		'nextPage': '/activity/register/res?page='+ str(page + 1),
 		'registerLists':registerLists,
 		'userInfo': userInfo
 	}
@@ -185,10 +185,24 @@ def consultOver(request):
 @login_required
 def consultResult(request):
 	userInfo = request.user
-	consult = Consult.objects.all()
+	page = request.GET.get('page', '1')
+	page = int(page)
+	limit = 10
+	consultTotals = Consult.objects.all().order_by('-created_date')
+	count = len(consultTotals)
+	pages = math.ceil(count/limit)
+	page = min(page, pages)
+	page = max(page, 1)
+	consults = Consult.objects.all().order_by('-created_date')[(page-1)*limit:page*limit]
 
 	context = {
-		'consults':consult,
+		'page': page,
+		'limit': limit ,
+		'pages': pages,
+		'count': count,
+		'prevPage': '/activity/consult/res?page='+ str(page - 1),
+		'nextPage': '/activity/consult/res?page='+ str(page + 1),
+		'consults':consults,
 		'userInfo': userInfo
 	}
 		
