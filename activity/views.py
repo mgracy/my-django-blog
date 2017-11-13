@@ -71,7 +71,8 @@ def registerSubmit(request):
 
 		try:
 			print('send SMS begin---')
-			user_params = build_user_params(mobileNo, activityChoice)
+			templateCode = activity.config.smsConsultTemplateCode
+			user_params = build_user_params(mobileNo, activityChoice, templateCode)
 			obj = make_request(user_params)
 			logger.debug('send sms to, response from sms interface is {}'.format(obj))
 		except Exception as e:
@@ -164,7 +165,8 @@ def consultSubmit(request):
 
 		try:
 			print('send SMS begin---')
-			user_params = build_user_params(mobileNo, '')
+			templateCode = activity.config.smsConsultTemplateCode
+			user_params = build_user_params(mobileNo, '', templateCode)
 			obj = make_request(user_params)
 			logger.debug('send sms to, response from sms interface is {}'.format(obj))
 		except Exception as e:
@@ -374,12 +376,12 @@ def sendMailsForRegistersID(request, pk):
 
 	return HttpResponse(str(response).replace("'",'"'))
 
-def build_user_params(mobileNo, activityChoice):
+def build_user_params(mobileNo, activityChoice, templateCode):
 	action = activity.config.smsAction
 	version = activity.config.smsVersion
 	regionId = activity.config.smsRegionId
 	signName = activity.config.smsSignName
-	templateCode = activity.config.smsTemplateCode
+	templateCode = templateCode
 	topic = activity.config.topic
 	user_params = {
 		'Action': action, 
