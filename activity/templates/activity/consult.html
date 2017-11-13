@@ -53,7 +53,7 @@
                 </div>
                 <div class="form-group">
                     <label for="questions">咨询问题 <span class="required_asterisk">*</span></label>
-                    <input type="text" class="form-control required" name="questions" id="questions">
+                    <textarea class="form-control required" name="questions" id="questions" rows="3"></textarea>
                     <p></p>
                 </div>                
             </div>          
@@ -122,29 +122,7 @@
                 if ($("div").find(".has-error").length <= 0) {
                     $("#btnSubmit").prop("disabled", false);
                 }
-            });
-
-            $("input:checkbox").change(function() {
-                if ($(this).is(":checked")) {
-                    $(".activity").find('p').text('');
-                    if ($("div").find(".has-error").length <= 0) {
-                        $("#btnSubmit").prop("disabled", false);
-                    }
-                }else{
-                    var cbxFlag = false;
-                    $("input:checkbox").each(function(i, item){
-                        if($(item).is(":checked")){
-                            cbxFlag = true;
-                        }
-                    })
-
-                    if(!cbxFlag){
-                        var labelText = $(".activity").find("label:first").text().replace('*','');
-                        $(".activity").find('p').text('请填写'+labelText);
-                        $("#btnSubmit").prop("disabled", true);
-                    }
-                } 
-            });
+            });            
 
             $("#btnSubmit").click(function () {
                 var requiredFlag = false;

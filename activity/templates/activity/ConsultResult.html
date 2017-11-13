@@ -1,0 +1,28 @@
+{% extends 'activity/base.html' %}
+    
+{% block content %}
+    {% csrf_token %}
+    <h3>Report</h3>        
+    <table class="table table-striped table-responsive">
+        <th style="width: 30px;">No.</th>
+        <th class="col-md-1">姓名</th>
+        <th class="col-md-2">公司名称</th>
+        <th class="col-md-1">手机</th>
+        <th class="col-md-1">邮箱</th>
+        <th class="col-md-4">咨询问题</th>
+        <th class="col-md-1">创建日期</th>
+        {% for consult in consults %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ consult.name }}</td>
+                <td>{{ consult.company_name }}</td>
+                <td>{{ consult.mobile_no }}</td>
+                <td>{{ consult.email_address }}</td>
+                <td>{{ consult.questions }}</td>
+                <td>{{ consult.created_date|date:'Y-m-d H:i:s'}}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    
+    {% include 'activity/page.html' %}
+{% endblock %}

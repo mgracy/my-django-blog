@@ -8,6 +8,7 @@ urlpatterns = [
     url(r'^consultSubmit/$', views.consultSubmit),
     url(r'^consult/$', views.consult),
     url(r'^result/$', views.result, name='register_res'),
+    url(r'^consult/res/$', views.consultResult, name='consult_res'),
     url(r'^report/$', views.report),
     url(r'^feedback/$', views.feedback),
     url(r'^updateActivity',views.updateActivity),

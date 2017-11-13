@@ -146,7 +146,7 @@ def consultSubmit(request):
 			print('send SMS successfully')
 
 		logger.debug('---submit send sms to {} over -{}--'.format(mobileNo, timezone.localtime(timezone.now())))
-		return render(request, 'activity/RegisterSuccess.html',{"name":name})
+		return render(request, 'activity/ConsultSuccess.html',{"name":name})
 	else:
 		return HttpResponse("Get")
 
@@ -226,6 +226,18 @@ def feedback_result(request):
 	}
 		
 	return render(request, 'activity/FeedbackResult.html', context)
+
+@login_required
+def consultResult(request):
+	userInfo = request.user
+	consult = Consult.objects.all()
+
+	context = {
+		'consults':consult,
+		'userInfo': userInfo
+	}
+		
+	return render(request, 'activity/consultResult.html', context)	
 
 def feedback_over(request):
 	return render(request, 'activity/FeedbackSuccess.html')	
