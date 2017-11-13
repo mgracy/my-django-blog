@@ -22,10 +22,7 @@ def register_list(request):
 	lenAct = len(activities)
 	return render(request, 'activity/Register.html', {'activities':activities, 'lenAct':lenAct})
 
-def consult(request):
-	return render(request, 'activity/consult.html')	
-
-def submit(request):
+def registerSubmit(request):
 	userAgent = request.META.get('HTTP_USER_AGENT')	
 	if not userAgent :
 		return HttpResponse('{"code":403,"desc":"Forbidden 403"}')
@@ -89,6 +86,38 @@ def submit(request):
 	else:
 		return HttpResponse("Get")
 
+@login_required
+def registerResult(request):
+	userInfo = request.user
+	page = request.GET.get('page', '1')
+	page = int(page)
+	limit = 10
+	registerTotals = Register.objects.all().order_by('-created_date')
+	count = len(registerTotals)
+	pages = math.ceil(count/limit)
+	page = min(page, pages)
+	page = max(page, 1)
+	registerLists = Register.objects.all().order_by('-created_date')[(page-1)*limit:page*limit]
+
+	context = {
+		'page': page,
+		'limit': limit ,
+		'pages': pages,
+		'count': count,
+		'prevPage': '/activity/result?page='+ str(page - 1),
+		'nextPage': '/activity/result?page='+ str(page + 1),
+		'registerLists':registerLists,
+		'userInfo': userInfo
+	}
+		
+	return render(request, 'activity/RegisterResult.html', context)
+
+def registerOver(request):
+	return render(request, 'activity/RegisterSuccess.html',{})
+
+def consult(request):
+	return render(request, 'activity/Consult.html')
+
 def consultSubmit(request):
 	userAgent = request.META.get('HTTP_USER_AGENT')	
 	if not userAgent :
@@ -150,34 +179,20 @@ def consultSubmit(request):
 	else:
 		return HttpResponse("Get")
 
+def consultOver(request):
+	return render(request, 'activity/ConsultSuccess.html',{})
+
 @login_required
-def result(request):
+def consultResult(request):
 	userInfo = request.user
-	page = request.GET.get('page', '1')
-	page = int(page)
-	limit = 10
-	registerTotals = Register.objects.all().order_by('-created_date')
-	count = len(registerTotals)
-	pages = math.ceil(count/limit)
-	page = min(page, pages)
-	page = max(page, 1)
-	registerLists = Register.objects.all().order_by('-created_date')[(page-1)*limit:page*limit]
+	consult = Consult.objects.all()
 
 	context = {
-		'page': page,
-		'limit': limit ,
-		'pages': pages,
-		'count': count,
-		'prevPage': '/activity/result?page='+ str(page - 1),
-		'nextPage': '/activity/result?page='+ str(page + 1),
-		'registerLists':registerLists,
+		'consults':consult,
 		'userInfo': userInfo
 	}
 		
-	return render(request, 'activity/RegisterResult.html', context)
-
-def report(request):
-	return render(request, 'activity/RegisterSuccess.html',{})	
+	return render(request, 'activity/ConsultResult.html', context)	
 
 def feedback(request):
 	feedbacks = Feedback.objects.all()
@@ -229,18 +244,6 @@ def feedback_result(request):
 		
 	return render(request, 'activity/FeedbackResult.html', context)
 
-@login_required
-def consultResult(request):
-	userInfo = request.user
-	consult = Consult.objects.all()
-
-	context = {
-		'consults':consult,
-		'userInfo': userInfo
-	}
-		
-	return render(request, 'activity/consultResult.html', context)	
-
 def feedback_over(request):
 	return render(request, 'activity/FeedbackSuccess.html')	
 
@@ -251,7 +254,6 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip	
-
 
 def updateActivity(request):
 	if request.method == "POST":
