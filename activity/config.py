@@ -14,7 +14,7 @@ mailBodySignuture = u"<br />【GTI Shanghai】静候您的莅临，谢谢。"
 
 #mail setting for consult
 consult_mailSubject = u"「咨询提交已成功，感谢您的支持」"
-consult_mailBodyDear = u"尊敬的 {}（先生/女士），<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们非常高兴收到您的咨询信息，在二个工作日内会有专员与您沟通。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;非常感谢！</p>"
+consult_mailBodyDear = u"<p style='font-family: 微软雅黑, sans-serif, serif, EmojiFont; color: rgb(0, 32, 96);'>尊敬的 {}（先生/女士），</p><p style='font-family: 微软雅黑, sans-serif, serif, EmojiFont; color: rgb(0, 32, 96);'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我们非常高兴收到您的咨询信息，在二个工作日内会有专员与您沟通。</p><p style='font-family: 微软雅黑, sans-serif, serif, EmojiFont; color: rgb(0, 32, 96);'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;非常感谢！</p>"
 consult_mailBodyEmbedImage = ""
 consult_mailBodyEmbedImagePath = ""
 consult_mailBodySignuture = u"""
@@ -37,7 +37,7 @@ consult_mailBodySignuture = u"""
 <tr>
 <td valign="top" style="padding:0cm 0cm 0cm 0cm">
 <div class="x_MsoNormal" style="text-align:justify; text-justify:inter-ideograph; line-height:12.0pt">
-<span style=""><span style="color:#002060">市场部<span lang="EN-US"></span></span></span></div>
+<span style=""><span style="font-family: 微软雅黑, sans-serif, serif, EmojiFont; color: rgb(0, 32, 96);">市场部<span lang="EN-US"></span></span></span></div>
 </td>
 
 </tr>

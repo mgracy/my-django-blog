@@ -151,7 +151,7 @@ def consultSubmit(request):
 		msg = '{}{}{}'.format(mailBodyDear, mailBodyEmbedImage, mailBodySignuture)
 
 		try:
-			SendEmail(mailFrom, emailAddress, mailFrom, mailSubject, msg, mailBodyEmbedImagePath)
+			SendEmail(mailFrom, emailAddress, 'inquiry.sh@gti.com.hk', mailSubject, msg, mailBodyEmbedImagePath)
 		except Exception as e:
 			print('*************error**************')
 			print(e)
