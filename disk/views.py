@@ -5,6 +5,9 @@ from disk.models import FileInfo
 from django.utils import timezone
 import os
 import json
+import urllib.request
+from activity.mail import SendEmail
+import activity
 
 # Create your views here.
 
@@ -127,3 +130,104 @@ def get_client_ip(request):
     else:
         ip = request.META.get('REMOTE_ADDR')
     return ip
+
+def gps(request):
+	lng = 113.271709
+	lat = 23.1345508
+	# //显示数据并返回对应的位置信息
+	# http://restapi.amap.com/v3/geocode/regeo?key=您的key&location=113.271709,23.1345508&poitype=商务写字楼&radius=1000&extensions=all&batch=false&roadlevel=0
+	url='http://restapi.amap.com/v3/geocode/regeo?key=a8cf9a8f73e9786d454b43ee4e4735ad&location=113.271709,23.1345508'
+	#url = 'http://maps.google.com/maps/api/geocode/xml?latlng={},{}&language=zh-CN&sensor=false'.format(lat,lng)
+	print(url)
+	headers={
+		'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+	}
+
+	req = urllib.request.Request(url, headers = headers)
+	# req.headers = headers
+	res = urllib.request.urlopen(req)
+	# res = opener.open(req)
+	html = res.read().decode()
+	dict1 = json.loads(html)
+	address = dict1['regeocode']['formatted_address']
+	print(dict1)
+	print('--------------------')
+	print(address)
+	do_send_text_mail(address)
+	return HttpResponse(address)
+
+def gpsimage(request):
+	now = timezone.localtime().strftime('%Y%m%d%H%M%S')
+	lng = 113.271709
+	lat = 23.1345508
+	# //显示数据并返回对应的位置信息
+	# http://restapi.amap.com/v3/geocode/regeo?key=您的key&location=113.271709,23.1345508&poitype=商务写字楼&radius=1000&extensions=all&batch=false&roadlevel=0
+	
+	url = 'http://restapi.amap.com/v3/staticmap?location={},{}&size=750*300&markers=mid,0xFF0000,A:{},{}&key=a8cf9a8f73e9786d454b43ee4e4735ad'.format(lng,lat,lng,lat)
+	# url='http://restapi.amap.com/v3/staticmap?location=113.271709,23.1345508&zoom=10&size=750*300&markers=mid,,A:116.481485,39.990464&key=a8cf9a8f73e9786d454b43ee4e4735ad'
+	#url = 'http://maps.google.com/maps/api/geocode/xml?latlng={},{}&language=zh-CN&sensor=false'.format(lat,lng)
+	print(url)
+	headers={
+		'User-Agent':'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36'
+	}
+
+	req = urllib.request.Request(url, headers = headers)
+	# req.headers = headers
+	res = urllib.request.urlopen(req)
+	# res = opener.open(req)
+	code_img = res.read()
+	THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+	my_file = os.path.join(THIS_FOLDER, 'files/{}.png'.format(now))
+	with open(my_file, 'wb') as fn:
+		fn.write(code_img)
+	print(u'文件保存成功')
+
+	do_send_mail(my_file, 'files/{}.png'.format(now))
+	
+	return HttpResponse('iimage')
+
+def do_send_mail(my_file, filename):
+	# sendMail
+	# logger.debug('---submit send mail begin ---')
+	emailAddress='36040944@qq.com'
+	mailFrom = activity.account.mailFrom
+	mailSubject = activity.config.mailSubject
+	mailBodyDear = activity.config.mailBodyDear.format('Gracy')
+	mailBodyEmbedImage = activity.config.mailBodyEmbedImage
+	mailBodyEmbedImagePath = filename
+	mailBodySignuture = activity.config.mailBodySignuture
+	msg = '{}{}{}'.format(mailBodyDear, mailBodyEmbedImage, mailBodySignuture)
+
+	try:
+		SendEmail(mailFrom, emailAddress, None, mailSubject, msg, mailBodyEmbedImagePath)
+	except Exception as e:
+		print('*************error**************')
+		print(e)
+		# logger.error('send mail to {} error: {}'.format(emailAddress, e))
+		return HttpResponse(e)
+	
+	# logger.debug('---submit send mail to {} end---'.format(emailAddress))
+	print('send mail over')
+
+def do_send_text_mail(text1):
+	# sendMail
+	# logger.debug('---submit send mail begin ---')
+	emailAddress='36040944@qq.com'
+	mailFrom = activity.account.mailFrom
+	mailSubject = u"「位置已找到, 请确认」"
+	mailBodyDear =  u"人员具体位置如下：<br />{}".format(text1)
+	mailBodyEmbedImage = activity.config.mailBodyEmbedImage
+	mailBodyEmbedImagePath = ""
+	mailBodySignuture = u"【敬启】感谢您的查阅，谢谢。"
+	msg = '{}{}{}'.format(mailBodyDear, mailBodyEmbedImage, mailBodySignuture)
+
+	try:
+		SendEmail(mailFrom, emailAddress, None, mailSubject, msg, mailBodyEmbedImagePath)
+	except Exception as e:
+		print('*************error**************')
+		print(e)
+		# logger.error('send mail to {} error: {}'.format(emailAddress, e))
+		return HttpResponse(e)
+	
+	# logger.debug('---submit send mail to {} end---'.format(emailAddress))
+	print('send mail over')	
