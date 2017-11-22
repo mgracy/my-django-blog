@@ -10,5 +10,8 @@ urlpatterns = [
 	url(r'^gps/$', views.gps),
 	url(r'^gpsimage/$', views.gpsimage),
 	url(r'^location/$', views.location),
+	url(r'^l/$', views.location),
+	url(r'^aloc/$', views.aloc),
+	url(r'^al/$', views.aloc),
 	# url(r'^files/disk/.*?$', views.download_detail)
 ]

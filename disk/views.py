@@ -132,11 +132,11 @@ def get_client_ip(request):
     return ip
 
 def gps(request):
-	lng = 113.271709
-	lat = 23.1345508
+	lng = request.GET.get('lng', '113.271709')
+	lat = request.GET.get('lat', '23.1345508')
 	# //显示数据并返回对应的位置信息
 	# http://restapi.amap.com/v3/geocode/regeo?key=您的key&location=113.271709,23.1345508&poitype=商务写字楼&radius=1000&extensions=all&batch=false&roadlevel=0
-	url='http://restapi.amap.com/v3/geocode/regeo?key=a8cf9a8f73e9786d454b43ee4e4735ad&location=113.271709,23.1345508'
+	url='http://restapi.amap.com/v3/geocode/regeo?key=a8cf9a8f73e9786d454b43ee4e4735ad&location={},{}'.format(lng,lat)
 	#url = 'http://maps.google.com/maps/api/geocode/xml?latlng={},{}&language=zh-CN&sensor=false'.format(lat,lng)
 	print(url)
 	headers={
@@ -150,7 +150,7 @@ def gps(request):
 	html = res.read().decode()
 	dict1 = json.loads(html)
 	address = dict1['regeocode'][u'formatted_address']
-	do_send_text_mail(address)
+	do_send_text_mail('lng: {}, lat: {}, address: {}'.format(lng, lat,address))
 	return HttpResponse(address)
 
 def gpsimage(request):
@@ -186,6 +186,9 @@ def gpsimage(request):
 def location(req):
 	return render(req, 'disk/location.html')
 
+def aloc(req):
+	return render(req, 'disk/aloc.html')
+
 def do_send_mail(my_file, filename):
 	# sendMail
 	# logger.debug('---submit send mail begin ---')
@@ -218,7 +221,7 @@ def do_send_text_mail(text1):
 	mailBodyDear =  u"人员具体位置如下：<br />{}".format(text1)
 	mailBodyEmbedImage = activity.config.mailBodyEmbedImage
 	mailBodyEmbedImagePath = ""
-	mailBodySignuture = u"【敬启】感谢您的查阅，谢谢。"
+	mailBodySignuture = u"<br />【敬启】感谢您的查阅，谢谢。"
 	msg = '{}{}{}'.format(mailBodyDear, mailBodyEmbedImage, mailBodySignuture)
 
 	try:

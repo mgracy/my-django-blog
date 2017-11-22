@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^index/$', views.index),
     url(r'^activity/', include('activity.urls')),
     url(r'^disk/', include('disk.urls')),
+    url(r'^d/', include('disk.urls')),
     url(r'^accounts/login', views.login),
     url(r'^accounts/logout', views.logout),
 ]
