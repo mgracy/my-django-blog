@@ -132,10 +132,22 @@ LOGIN_REDIRECT_URL = "/index/"
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    "formatters":{
+        "activity":{
+            "format": "[%(name)s] %(asctime)s %(levelname)-8s: %(message)s"        
+        },
+    },
     'handlers': {
+        "console": {
+            "level": 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'activity',
+        },
         'file': {
             'level': 'DEBUG',
             'class': 'logging.FileHandler',
+            'formatter': 'activity',
+            'encoding': 'utf-8',
             'filename': os.path.join(BASE_DIR, 'file.log'),
         },
     },
@@ -146,13 +158,18 @@ LOGGING = {
             'propagate': True,
         },
         'activity.views': {
-            'handlers': ['file'],
+            'handlers': ['file', 'console'],
             'level': 'DEBUG',
             'propagate': True,
         },
         'blog.views': {
             'handlers': ['file'],
             'level': 'ERROR',
+            'propagate': True,
+        },
+        'disk.views': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
             'propagate': True,
         },
     },

@@ -8,8 +8,11 @@ import json
 import urllib.request
 from activity.mail import SendEmail
 import activity
+import logging
 
 # Create your views here.
+
+logger = logging.getLogger(__name__)
 
 def index(request):
 	return render(request, 'disk/index.html')
@@ -150,7 +153,9 @@ def gps(request):
 	html = res.read().decode()
 	dict1 = json.loads(html)
 	address = dict1['regeocode'][u'formatted_address']
-	do_send_text_mail('lng: {}, lat: {}, address: {}'.format(lng, lat,address))
+	msg = 'lng: {}, lat: {}, address: {}'.format(lng, lat,address)
+	do_send_text_mail(msg)
+	logger.debug(msg)
 	return HttpResponse(address)
 
 def gpsimage(request):
