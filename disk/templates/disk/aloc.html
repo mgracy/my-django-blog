@@ -6,6 +6,7 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
     <title>浏览器定位</title>
     <link rel="stylesheet" href="http://cache.amap.com/lbs/static/main1119.css"/>
+    <script type="text/javascript" src="{% static 'disk/js/jquery-1.10.0.min.js' %}"></script>
     <script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.1&key=cd091a56e8a777853b2a62f8fafe3946"></script>
     <script type="text/javascript" src="http://cache.amap.com/lbs/static/addToolbar.js"></script>
 <body>
@@ -60,6 +61,17 @@
     //解析定位错误信息
     function onError(data) {
         document.getElementById('tip').innerHTML = '定位失败';
+         $.ajax({
+            url:'/disk/gps/',
+            type:'get',
+            data:{'lng':'113', 'lat':'23'},
+            success:function(data){
+                console.log(data);
+            },
+            error:function(err){
+                console.log(err);
+            }
+        })
     }
 </script>
 </body>
