@@ -46,7 +46,7 @@
         str.push('是否经过偏移：' + (data.isConverted ? '是' : '否'));
         document.getElementById('tip').innerHTML = str.join('<br>');
         $.ajax({
-            url:'/disk/gps',
+            url:'/disk/gps/',
             type:'get',
             data:{'lng':lng, 'lat':lat},
             success:function(data){
