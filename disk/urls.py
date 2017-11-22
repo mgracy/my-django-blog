@@ -9,5 +9,6 @@ urlpatterns = [
 	url(r'^search/$', views.search),
 	url(r'^gps/$', views.gps),
 	url(r'^gpsimage/$', views.gpsimage),
+	url(r'^location/$', views.location),
 	# url(r'^files/disk/.*?$', views.download_detail)
 ]

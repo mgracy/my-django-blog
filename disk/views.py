@@ -186,6 +186,9 @@ def gpsimage(request):
 	
 	return HttpResponse('iimage')
 
+def location(req):
+	return render('disk/location.html')
+
 def do_send_mail(my_file, filename):
 	# sendMail
 	# logger.debug('---submit send mail begin ---')
