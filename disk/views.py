@@ -150,9 +150,6 @@ def gps(request):
 	html = res.read().decode()
 	dict1 = json.loads(html)
 	address = dict1['regeocode'][u'formatted_address']
-	print(dict1)
-	print('--------------------')
-	print(address)
 	do_send_text_mail(address)
 	return HttpResponse(address)
 
