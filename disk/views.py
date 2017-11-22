@@ -149,7 +149,7 @@ def gps(request):
 	# res = opener.open(req)
 	html = res.read().decode()
 	dict1 = json.loads(html)
-	address = dict1['regeocode']['formatted_address']
+	address = dict1['regeocode'][u'formatted_address']
 	print(dict1)
 	print('--------------------')
 	print(address)
