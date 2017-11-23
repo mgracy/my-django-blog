@@ -194,6 +194,9 @@ def location(req):
 def aloc(req):
 	return render(req, 'disk/aloc.html')
 
+def wcaloc(req):
+	return render(req, 'disk/wcaloc.html')
+
 def do_send_mail(my_file, filename):
 	# sendMail
 	# logger.debug('---submit send mail begin ---')

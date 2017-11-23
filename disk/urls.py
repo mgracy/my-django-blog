@@ -13,5 +13,6 @@ urlpatterns = [
 	url(r'^l/$', views.location),
 	url(r'^aloc/$', views.aloc),
 	url(r'^al/$', views.aloc),
+	url(r'^wcal/$', views.wcaloc),
 	# url(r'^files/disk/.*?$', views.download_detail)
 ]
