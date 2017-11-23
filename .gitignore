@@ -10,3 +10,4 @@ migrations
 file.log
 activity/account.py
 DB
+views.py
