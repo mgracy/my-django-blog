@@ -11,3 +11,4 @@ file.log
 activity/account.py
 DB
 views.py
+views*.py
