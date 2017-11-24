@@ -12,3 +12,4 @@ activity/account.py
 DB
 views.py
 views*.py
+settings.py
