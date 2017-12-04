@@ -7,18 +7,6 @@
 	<title>泊语湾车行登记表</title>
 	  <link rel="stylesheet" href="{% static 'disk/css/bootstrap.min.css' %}">
 </head>
- <script type="text/javascript">
-    // 对浏览器的UserAgent进行正则匹配，不含有微信独有标识的则为其他浏览器
-    var useragent = navigator.userAgent;
-    if (useragent.match(/MicroMessenger/i) != 'MicroMessenger') {
-        // 这里警告框会阻塞当前页面继续加载
-        alert('已禁止本次访问：您必须使用微信内置浏览器访问本页面！');
-        // 以下代码是用javascript强行关闭当前页面
-        var opened = window.open('about:blank', '_self');
-        opened.opener = null;
-        opened.close();
-    }
- </script>
 <body>
 <!-- 	<canvas id="myCanvas"> 
 	Your browser does not support the canvas element.
@@ -34,6 +22,20 @@
                     <br>                    
                 </span> 
             </div>
+            <div>
+                    此群为泊语湾公益性质生活类服务群，目的是为了泊语湾邻居们出行方便，车主出行和需要坐车的邻居在群发布你的出发时间、地点、方向即可！乘客坐车自行承担意外责任。本群不负责任何交通事故和刑事案件责任，只作交流。此群仅限本小区业主入群，需按业主群的要求改好群名片！文明聊天，不准发不雅视频图片以及广告！投诉多次的踢出处理。全程不以营利为目的，乘客可适当补贴车主（油费、路费）。。。。 具体补助上限为10元/人/次。 注：比较远的路程可与车主协商补助。
+                    <br />本群属于泊语湾业主内部公益性质微信群，严禁发布无关广告！
+                    <br />团结友爱，和谐家园！！
+                    <br />
+                    <br />线路发布指引
+                    <br />【人找车】XX时间从哪到哪，几人。电话XXXXXX
+                    <br />例：【人找车】12月4日中午12点从泊语湾到同和，2人。电话13800000000
+                    <br />
+                    <br />【车找人】XX时间从哪到哪，经过XX，几空位。电话XXXXXX
+                    <br />例：【车找人】12月4日中午12点从泊语湾到同和，经过康大、广河高速、同和，3空位。电话13800000000
+                    <br />
+                    <br />大家按业主群要求改好群名片。稍晚会清理未改名片的。
+                </div>
             <hr>
             <div class="form">
                 <div class="form-group">
