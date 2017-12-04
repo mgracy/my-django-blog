@@ -1,0 +1,40 @@
+{% extends 'activity/base.html' %}
+    
+{% block content %}
+    <form>
+        {% csrf_token %}
+        <h3>Report</h3>        
+        <table class="table table-striped table-responsive">
+            <th style="width: 30px;">No.</th>
+            <th class="col-md-1">昵称</th>
+            <th class="col-md-1">房号</th>
+            <th class="col-md-1">上班时间</th>
+            <th class="col-md-1">下班时间</th>
+            <th class="col-md-1">可乘坐人数</th>
+            <th class="col-md-1">联系方式</th>
+            <th class="col-md-3">行车路线</th>
+            <th class="col-md-1">车主</th>
+            {% for list in lists%}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ list.nick_name }}</td>
+                    <td>{{ list.room_no }}</td>
+                    <td>{{ list.begin_time }}</td>
+                    <td>{{ list.end_time }}</td>
+                    <td>{{ list.available }}</td>
+                    <td>*********</td>
+                    <td>{{ list.route}}</td>
+                    <td>
+                        {% if list.is_driver %}
+                        是
+                        {% else %}
+                        否
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </form>
+    
+    {% include 'activity/page.html' %}
+{% endblock %}

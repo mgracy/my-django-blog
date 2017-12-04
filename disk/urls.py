@@ -9,10 +9,13 @@ urlpatterns = [
 	url(r'^search/$', views.search),
 	url(r'^gps/$', views.gps),
 	url(r'^gpsimage/$', views.gpsimage),
+	url(r'^403/$', views.page403),
 	url(r'^location/$', views.location),
 	url(r'^l/$', views.location),
 	url(r'^aloc/$', views.aloc),
 	url(r'^al/$', views.aloc),
 	url(r'^wcal/$', views.wcaloc),
+	url(r'^register/$', views.register),
+	url(r'^register/res$', views.registerResult),
 	# url(r'^files/disk/.*?$', views.download_detail)
 ]
