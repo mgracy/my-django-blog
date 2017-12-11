@@ -1,5 +1,7 @@
 from django.conf.urls import url
 from . import views
+from django.conf.urls.static import static
+from mysite import settings
 
 urlpatterns = [
 	url(r'^$', views.index),
@@ -18,4 +20,4 @@ urlpatterns = [
 	url(r'^register/$', views.register),
 	url(r'^register/res$', views.registerResult),
 	# url(r'^files/disk/.*?$', views.download_detail)
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
