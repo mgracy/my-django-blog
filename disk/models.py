@@ -13,7 +13,7 @@ class FileInfo(models.Model):
 class UserGPS(models.Model):
 	username = models.CharField(max_length=50, null=True)
 	user_ip = models.GenericIPAddressField(null=True)
-	user_agent = models.CharField(max_length=200, null=True)
+	user_agent = models.CharField(max_length=300, null=True)
 	lng = models.CharField(max_length=15, null=True)
 	lat = models.CharField(max_length=15, null=True)
 	address = models.CharField(max_length=200, null=True)
