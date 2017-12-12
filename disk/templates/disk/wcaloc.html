@@ -29,6 +29,11 @@
 /***************************************
 由于Chrome、IOS10等已不再支持非安全域的浏览器定位请求，为保证定位成功率和精度，请尽快升级您的站点到HTTPS。
 ***************************************/
+    var code = location.search.slice(1).split('=')[0];
+    var authCode= '';
+    if(code=="code"){
+        authCode=location.search.slice(1).split('=')[1];
+    }
     var map, geolocation;
     //加载地图，调用浏览器定位服务
     map = new AMap.Map('container', {
@@ -62,7 +67,7 @@
         $.ajax({
             url:'/disk/gps/',
             type:'get',
-            data:{'lng':lng, 'lat':lat},
+            data:{'lng':lng, 'lat':lat, 'code':authCode},
             success:function(data){
                 console.log(data);
                 if(data.indexOf('html')>0){
