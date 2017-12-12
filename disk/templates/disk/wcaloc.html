@@ -31,20 +31,20 @@
 ***************************************/
     var params = location.search;
     var authcode, code = "";
-
-    params = "{\"" + 
-             params
-             .replace( /\?/gi, "" )
-             .replace( /\&/gi, "\",\"" )
-             .replace( /\=/gi, "\":\"" ) +
-             "\"}";
-      
-    params = JSON.parse( params );
-    if(params.authcode)
-        authcode = params.authcode;
-    if(params.code)
-        code = params.code;
-    
+    if(params.length>0){
+        params = "{\"" + 
+                 params
+                 .replace( /\?/gi, "" )
+                 .replace( /\&/gi, "\",\"" )
+                 .replace( /\=/gi, "\":\"" ) +
+                 "\"}";
+          
+        params = JSON.parse( params );
+        if(params.authcode)
+            authcode = params.authcode;
+        if(params.code)
+            code = params.code;
+    }
     var map, geolocation;
     //加载地图，调用浏览器定位服务
     map = new AMap.Map('container', {
