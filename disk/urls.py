@@ -12,6 +12,7 @@ urlpatterns = [
 	url(r'^gps/$', views.gps),
 	url(r'^gpsimage/$', views.gpsimage),
 	url(r'^403/$', views.page403),
+	url(r'^404/$', views.error_404),
 	url(r'^location/$', views.location),
 	url(r'^l/$', views.location),
 	url(r'^aloc/$', views.aloc),
