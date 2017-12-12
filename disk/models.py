@@ -24,7 +24,7 @@ class UserGPS(models.Model):
 	create_by = models.CharField(max_length=50, null=True)
 
 	def __str__(self):
-		return u'%s - %s - %s' %(self.address, str(self.user_ip), self.code)
+		return u'%s \t %s' %(self.username, self.address)
 
 class Traffic(models.Model):
 	# 我觉得可以做两张表格，一张登记有车车主的，
