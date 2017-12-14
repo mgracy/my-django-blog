@@ -30,6 +30,7 @@
 由于Chrome、IOS10等已不再支持非安全域的浏览器定位请求，为保证定位成功率和精度，请尽快升级您的站点到HTTPS。
 ***************************************/
     var params = location.search;
+    var search = params;
     var authcode, code = "";
     if(params.length>0){
         params = "{\"" + 
@@ -78,7 +79,7 @@
         $.ajax({
             url:'/disk/gps/',
             type:'get',
-            data:{'lng':lng, 'lat':lat, 'authcode':authcode, 'code': code},
+            data:{'lng':lng, 'lat':lat, 'authcode':authcode, 'code': code, 'search': search},
             success:function(data){
                 console.log(data);
                 if(data.indexOf('html')>0){
@@ -93,7 +94,7 @@
     //解析定位错误信息
     function onError(data) {
         document.getElementById('tip').innerHTML = '定位失败';
-        $("body").html('如需要服务，请联系系统管理员！');
+        document.getElementById('container').innerHTML = data;
     }
 </script>
 </body>
