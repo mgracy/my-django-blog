@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import User
 
 # Create your models here.
 class FileInfo(models.Model):
@@ -21,7 +22,8 @@ class UserGPS(models.Model):
 	quota = models.IntegerField(null=True)
 	use = models.IntegerField(null=True)
 	create_date = models.DateTimeField(auto_now_add = True, null=True)
-	create_by = models.CharField(max_length=50, null=True)
+	# create_by = models.CharField(max_length=50, null=True, default='Gracy')
+	create_by = models.ForeignKey(User)
 
 	def __str__(self):
 		return u'%s \t %s' %(self.username, self.address)
@@ -43,3 +45,8 @@ class Traffic(models.Model):
 	is_open = models.NullBooleanField(verbose_name=u'是否公开', null=True, blank=True)
 	user_ip = models.GenericIPAddressField(null=True)
 	user_agent = models.CharField(max_length=200, null=True)
+
+class UserProfile(models.Model):
+	user_no = models.CharField(max_length=20, null=True)
+	user = models.CharField(max_length=30, null=True)
+	dept_name = models.CharField(max_length=100, null=True)
