@@ -138,11 +138,11 @@ consult_mailBodySignuture = u"""
 smsAction = 'SendSms'
 smsVersion = '2017-05-25'
 smsRegionId = 'cn-hangzhou'
-smsSignName = u'广州科宸电脑工程有限公司'
-smsTemplateCode = 'SMS_105445037'
+smsSignName = u'xxx工程有限公司'
+smsTemplateCode = 'SMS_10xx7'
 
 # sms consult setting
-smsConsultTemplateCode = 'SMS_109495461'
+smsConsultTemplateCode = 'xxx'
 
 # notificationType
 notificationType = 'MAIL'
